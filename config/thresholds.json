@@ -1,0 +1,142 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2026-03-10",
+  "notes": "All scoring thresholds for the 9 deterministic checks. Adjust values here to recalibrate scoring without touching code.",
+  "checks": {
+    "word_count": {
+      "label": "Word count",
+      "good": { "min": 100, "max": 200 },
+      "warning": { "min": 201, "max": 250 },
+      "bad_below": 100,
+      "bad_above": 250,
+      "messages": {
+        "good": "Length is within the recommended range.",
+        "warning": "Slightly long — consider tightening for readability.",
+        "bad_short": "Too short — add context so the message feels complete.",
+        "bad_long": "Too long — reduce length to improve scannability."
+      }
+    },
+    "paragraphs": {
+      "label": "Paragraphs",
+      "good": { "min": 3, "max": 5 },
+      "warning": { "min": 6, "max": 6 },
+      "bad_below": 3,
+      "bad_above": 7,
+      "messages": {
+        "good": "Structure is clear and easy to follow.",
+        "warning": "Slightly over-structured — consider combining two paragraphs.",
+        "bad_short": "Structure is limited — aim for 3–5 short paragraphs.",
+        "bad_long": "Too many breaks — consolidate for a smoother flow."
+      }
+    },
+    "letters_per_word": {
+      "label": "Letters per word",
+      "good_max": 7.0,
+      "messages": {
+        "good": "Wording is straightforward and accessible.",
+        "bad": "Wording is complex — simplify terms where possible."
+      }
+    },
+    "words_per_paragraph": {
+      "label": "Words per paragraph",
+      "good_max": 35,
+      "warning": { "min": 36, "max": 49 },
+      "bad_above": 50,
+      "messages": {
+        "good": "Paragraph length supports quick scanning.",
+        "warning": "Paragraph length is borderline — reducing paragraph size can improve clarity and response rates.",
+        "bad": "Paragraphs are long — split to improve readability."
+      }
+    },
+    "unique_domains": {
+      "label": "Number of unique domains linked",
+      "good": [1, 2],
+      "warning": [0],
+      "bad_zero": false,
+      "bad_above": 3,
+      "messages": {
+        "good": "Linking is consistent (1–2 domains).",
+        "warning": "No links detected — consider adding your company website in the email signature for credibility.",
+        "bad_zero": "No links detected.",
+        "bad_many": "Multiple domains (3+) detected — can increase spam risk."
+      }
+    },
+    "spellcheck": {
+      "label": "Spellcheck",
+      "good": 0,
+      "supported_languages": ["en-US", "en-GB"],
+      "default_language": "en-US",
+      "messages": {
+        "good": "No spelling issues detected.",
+        "bad": "Spelling issues detected — correct them before sending."
+      }
+    },
+    "spam_words_categories": {
+      "label": "Spam words categories",
+      "good": 0,
+      "warning": { "min": 1, "max": 3 },
+      "bad_above": 3,
+      "medium_risk_stack_threshold": 2,
+      "b2b_stack_threshold": 2,
+      "messages": {
+        "good": "No high-risk categories triggered.",
+        "warning": "Some risk categories triggered — review tone and formatting.",
+        "bad": "Multiple risk categories triggered — revise to reduce risk."
+      },
+      "categories": [
+        "Banned / high-risk pitch terms",
+        "Urgency / pressure language",
+        "Exclamation marks",
+        "ALL CAPS",
+        "Bullets",
+        "Multiple questions",
+        "Emojis"
+      ]
+    },
+    "spam_words": {
+      "label": "Spam words",
+      "good": 0,
+      "warning": { "min": 1, "max": 3 },
+      "bad_above": 3,
+      "messages": {
+        "good": "No flagged terms detected.",
+        "warning": "Some flagged terms detected — consider alternatives.",
+        "bad": "Many flagged terms detected — replace and retest."
+      }
+    },
+    "duplicate_words": {
+      "label": "Duplicate words",
+      "good": 0,
+      "warning": { "min": 1, "max": 2 },
+      "bad_above": 2,
+      "duplicate_threshold": 3,
+      "min_token_length": 3,
+      "messages": {
+        "good": "No meaningful repetition detected.",
+        "warning": "Minor repetition detected — consider varying wording.",
+        "bad": "Repeated wording detected — revise for clarity and flow."
+      }
+    }
+  },
+  "scoring": {
+    "total_checks": 10,
+    "weights": {
+      "word_count": 13,
+      "paragraphs": 13,
+      "words_per_paragraph": 11,
+      "letters_per_word": 6,
+      "spam_words_categories": 10,
+      "spam_words": 10,
+      "unique_domains": 8,
+      "spellcheck": 7,
+      "duplicate_words": 10,
+      "cta_strength": 12
+    },
+    "levels": {
+      "good": { "min_score": 80, "message": "Content quality looks strong. You're in a good place to send." },
+      "warning": { "min_score": 60, "message": "Content is close. A few adjustments will reduce risk." },
+      "bad": { "min_score": 0, "message": "Content needs revision. Address the items below and test again." }
+    }
+  },
+  "character_limit": 4000
+}

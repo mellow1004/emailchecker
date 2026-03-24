@@ -1,0 +1,20 @@
+{
+  "name": "brightvision-email-checker-backend",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.32.1",
+    "axios": "^1.7.9",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "tldts": "^6.1.6"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

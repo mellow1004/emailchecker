@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2026-03-10",
+  "notes": "Approved ALL CAPS acronyms that should NOT trigger the ALL CAPS spam category. Review quarterly.",
+  "allowlist": [
+    "API", "CRM", "SaaS", "B2B", "SDR", "BDR", "AE", "CEO", "CFO", "CTO", "CMO", "COO",
+    "GDPR", "DKIM", "SPF", "DMARC", "NIS2", "DORA", "IRRBB", "ALM", "CLM",
+    "ROI", "KPI", "OKR", "MQL", "SQL", "ARR", "MRR", "CAC", "LTV",
+    "UK", "US", "EU", "US", "UN", "NATO", "HR", "IT", "AI", "ML",
+    "Q1", "Q2", "Q3", "Q4"
+  ]
+}

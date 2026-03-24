@@ -1,0 +1,27 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2026-03-10",
+  "notes": "Common words ignored during duplicate word detection. These are high-frequency words that carry no signal when repeated. Add or remove as needed during calibration.",
+  "min_token_length": 3,
+  "stopWords": [
+    "the", "and", "for", "are", "but", "not", "you", "all", "can", "her",
+    "was", "one", "our", "out", "day", "get", "has", "him", "his", "how",
+    "its", "may", "new", "now", "old", "see", "two", "who", "boy", "did",
+    "she", "use", "way", "had", "let", "put", "say", "too", "any", "each",
+    "far", "few", "got", "own", "run", "set", "try", "yes", "yet",
+    "about", "after", "also", "back", "been", "before", "being", "between",
+    "both", "came", "come", "could", "does", "done", "down", "even", "ever",
+    "from", "give", "good", "great", "have", "here", "high", "into", "just",
+    "keep", "know", "last", "left", "like", "look", "made", "make", "many",
+    "more", "most", "move", "much", "must", "name", "need", "next", "only",
+    "open", "over", "part", "same", "self", "send", "some", "such", "take",
+    "than", "that", "them", "then", "there", "they", "this", "time", "told",
+    "very", "want", "well", "went", "were", "what", "when", "which", "will",
+    "with", "work", "would", "your", "years", "through", "these", "those",
+    "their", "think", "every", "first", "where", "while", "three", "under",
+    "place", "right", "small", "found", "still", "going", "again", "never",
+    "along", "often", "since", "until", "might", "always", "around", "should",
+    "because", "between", "during", "however", "another", "without", "already",
+    "though", "whether", "nothing", "someone", "something", "within"
+  ]
+}
