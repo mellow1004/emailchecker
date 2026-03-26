@@ -116,76 +116,91 @@ export default function Tab1CheckDraft() {
   };
 
   return (
-    <div className="tab1-layout">
-      <section className="tab1-editor">
-        <label className="tab1-label" htmlFor="subject-line">
-          Subject line
-        </label>
-        <input
-          id="subject-line"
-          type="text"
-          className="tab1-input"
-          placeholder="e.g. ALM and Treasury infrastructure for {{Company}}"
-          value={subjectLine}
-          onChange={(e) => setSubjectLine(e.target.value)}
-        />
-        <p className="tab1-hint">Optional — used for subject line analysis</p>
-        <label className="tab1-label" htmlFor="draft">
-          Email draft
-        </label>
-        <textarea
-          id="draft"
-          className="tab1-textarea"
-          placeholder="Paste your cold email draft here…"
-          value={draft}
-          onChange={handleDraftChange}
-          rows={20}
-          maxLength={CHAR_LIMIT}
-        />
-        <div className="tab1-meta">
-          <span className={`tab1-char-count ${overLimit ? 'tab1-char-count--over' : ''}`}>
-            {charCount.toLocaleString()} / {CHAR_LIMIT.toLocaleString()}
-          </span>
-          <div className="tab1-spelling">
-            <span className="tab1-spelling-label">Spelling:</span>
-            <button
-              type="button"
-              className={`tab1-spelling-btn ${spelling === 'US' ? 'tab1-spelling-btn--active' : ''}`}
-              onClick={() => setSpelling('US')}
-            >
-              US
-            </button>
-            <button
-              type="button"
-              className={`tab1-spelling-btn ${spelling === 'UK' ? 'tab1-spelling-btn--active' : ''}`}
-              onClick={() => setSpelling('UK')}
-            >
-              UK
-            </button>
-          </div>
-        </div>
-        <button
-          type="button"
-          className="tab1-submit"
-          disabled={!canSubmit || loading}
-          onClick={runCheck}
-        >
-          {loading ? 'Checking…' : 'Run email check'}
-        </button>
-        {error && <p className="tab1-error">{error}</p>}
-      </section>
+    <div className="tab-content">
+      <div className="tab-layout">
+        <div className="tab-layout-left">
+          <section className="input-card">
+            <p className="input-card-description">
+              Paste your cold email draft and get a full breakdown — scored, flagged, and improved.
+            </p>
 
-      <aside className="tab1-results">
-        {!results && !loading && (
-          <div className="tab1-results-empty">
-            <div className="tab1-results-empty-icon" aria-hidden>
-              <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="8" y="16" width="48" height="36" rx="4" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.4" />
-                <path d="M8 22l24 18 24-18" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.6" />
-              </svg>
+            <div className="input-field-group">
+              <label className="input-label" htmlFor="subject-line">
+                Subject line
+              </label>
+              <input
+                id="subject-line"
+                type="text"
+                className="input-field"
+                placeholder="e.g. Treasury infrastructure for {{Company}}"
+                value={subjectLine}
+                onChange={(e) => setSubjectLine(e.target.value)}
+              />
+              <span className="input-hint">Optional — included in subject line analysis</span>
             </div>
-            <h3 className="tab1-results-empty-title">Results will appear here</h3>
-            <p className="tab1-results-empty-text">Paste your email draft in the editor, then click <strong>Run email check</strong> to see your score and personalized suggestions for each check.</p>
+
+            <div className="input-field-group">
+              <label className="input-label" htmlFor="draft">
+                Email draft
+              </label>
+              <textarea
+                id="draft"
+                className="input-field input-textarea"
+                placeholder="Paste your cold email draft here..."
+                value={draft}
+                onChange={handleDraftChange}
+                rows={20}
+                maxLength={CHAR_LIMIT}
+              />
+              <div className="input-footer">
+                <span className={`input-counter ${overLimit ? 'tab1-char-count--over' : ''}`}>
+                  {charCount.toLocaleString()} / {CHAR_LIMIT.toLocaleString()}
+                </span>
+                <div className="spelling-toggle">
+                  <span className="spelling-label">Spelling:</span>
+                  <button
+                    type="button"
+                    className={`spelling-btn ${spelling === 'US' ? 'spelling-btn--active' : ''}`}
+                    onClick={() => setSpelling('US')}
+                  >
+                    US
+                  </button>
+                  <button
+                    type="button"
+                    className={`spelling-btn ${spelling === 'UK' ? 'spelling-btn--active' : ''}`}
+                    onClick={() => setSpelling('UK')}
+                  >
+                    UK
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              className="btn-run"
+              disabled={!canSubmit || loading}
+              onClick={runCheck}
+            >
+              {loading ? 'Analysing...' : 'Review email'}
+            </button>
+            {error && <p className="tab1-error">{error}</p>}
+          </section>
+        </div>
+
+        <div className="tab-layout-right">
+          <aside className="tab1-results">
+        {!results && !loading && (
+          <div className="results-empty">
+            <div className="results-empty-icon">✉️</div>
+            <h3 className="results-empty-title">Your review will appear here</h3>
+            <ul className="results-empty-list">
+              <li>✓ Overall quality score</li>
+              <li>✓ Breakdown across 9 checks</li>
+              <li>✓ Flagged wording and weak spots</li>
+              <li>✓ Practical improvement suggestions</li>
+              <li>✓ Stronger revised version</li>
+            </ul>
           </div>
         )}
         {loading && (
@@ -390,7 +405,9 @@ export default function Tab1CheckDraft() {
             </p>
           </>
         )}
-      </aside>
+          </aside>
+        </div>
+      </div>
     </div>
   );
 }
