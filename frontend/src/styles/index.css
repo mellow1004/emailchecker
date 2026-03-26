@@ -1649,3 +1649,294 @@ textarea::placeholder {
   color: var(--bv-text-muted);
   line-height: 1.4;
 }
+
+/* Landing page sections */
+.lp-section {
+  padding: var(--spacing-3xl) 0;
+}
+
+.lp-section--light {
+  background-color: var(--color-bg);
+}
+
+.lp-section--dark {
+  background-color: var(--color-bg-dark);
+}
+
+.lp-section-label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+  margin-bottom: var(--spacing-md);
+}
+
+.lp-section-label--light {
+  color: var(--color-accent);
+}
+
+.lp-section-title {
+  font-size: clamp(28px, 3vw, 44px);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-md);
+  max-width: 700px;
+}
+
+.lp-section-title--light {
+  color: var(--color-text-white);
+}
+
+.lp-section-subtitle {
+  font-size: var(--font-size-md);
+  color: var(--color-text-secondary);
+  max-width: 580px;
+  margin-bottom: var(--spacing-2xl);
+  line-height: var(--line-height-relaxed);
+}
+
+.lp-section-subtitle--light {
+  color: var(--color-text-white-muted);
+}
+
+/* Steps */
+.lp-steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-lg);
+}
+
+.lp-step {
+  background-color: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  padding: var(--spacing-xl);
+}
+
+.lp-step--featured {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-md);
+}
+
+.lp-step-number {
+  width: 32px;
+  height: 32px;
+  background-color: var(--color-primary);
+  color: var(--color-text-white);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-md);
+}
+
+.lp-step-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.lp-step-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+}
+
+/* Checks grid */
+.lp-checks-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-lg);
+}
+
+.lp-check-card {
+  background-color: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  padding: var(--spacing-lg);
+}
+
+.lp-check-number {
+  width: 28px;
+  height: 28px;
+  background-color: rgba(26, 58, 46, 0.08);
+  color: var(--color-primary);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-sm);
+}
+
+.lp-check-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-xs);
+}
+
+.lp-check-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+}
+
+/* Features grid */
+.lp-features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-lg);
+}
+
+.lp-feature-card {
+  background-color: rgba(255,255,255,0.05);
+  border-radius: var(--radius-lg);
+  border: 1px solid rgba(255,255,255,0.1);
+  padding: var(--spacing-xl);
+  text-align: center;
+}
+
+.lp-feature-icon {
+  font-size: 32px;
+  margin-bottom: var(--spacing-md);
+}
+
+.lp-feature-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-white);
+  margin-bottom: var(--spacing-sm);
+}
+
+.lp-feature-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-white-muted);
+  line-height: var(--line-height-relaxed);
+}
+
+/* Disclaimer */
+.lp-disclaimer {
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: flex-start;
+  background-color: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  border-left: 4px solid var(--color-accent);
+  padding: var(--spacing-lg) var(--spacing-xl);
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.lp-disclaimer-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.lp-disclaimer p {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+  margin-top: var(--spacing-xs);
+}
+
+/* Audience grid */
+.lp-audience-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-lg);
+}
+
+.lp-audience-card {
+  background-color: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  padding: var(--spacing-xl);
+}
+
+.lp-audience-card--featured {
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-md);
+}
+
+.lp-audience-icon {
+  font-size: 28px;
+  margin-bottom: var(--spacing-md);
+}
+
+.lp-audience-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin-bottom: var(--spacing-sm);
+}
+
+.lp-audience-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+  line-height: var(--line-height-relaxed);
+}
+
+/* CTA section */
+.lp-cta {
+  background-color: var(--color-bg-dark);
+  padding: var(--spacing-3xl) 0;
+  text-align: center;
+}
+
+.lp-cta-title {
+  font-size: clamp(24px, 3vw, 40px);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-white);
+  margin-bottom: var(--spacing-md);
+}
+
+.lp-cta-subtitle {
+  font-size: var(--font-size-md);
+  color: var(--color-text-white-muted);
+  max-width: 580px;
+  margin: 0 auto var(--spacing-xl);
+  line-height: var(--line-height-relaxed);
+}
+
+.lp-cta-buttons {
+  display: flex;
+  gap: var(--spacing-md);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Footer */
+.lp-footer {
+  background-color: var(--color-bg-dark-secondary);
+  padding: var(--spacing-lg) 0;
+  text-align: center;
+}
+
+.lp-footer-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-white-muted);
+}
+
+.lp-footer-brand {
+  color: var(--color-accent);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .lp-steps,
+  .lp-checks-grid,
+  .lp-audience-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .lp-features-grid {
+    grid-template-columns: 1fr;
+  }
+}
