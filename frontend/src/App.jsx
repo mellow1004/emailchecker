@@ -3,36 +3,55 @@ import Tab1CheckDraft from './components/Tab1CheckDraft.jsx';
 import Tab2GenerateScore from './components/Tab2GenerateScore.jsx';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState(1);
+  const [activeTab, setActiveTab] = useState('tab1');
 
   return (
     <div className="app">
-      <header className="app-header">
-        <div className="app-hero">
-          <div className="app-wordmark">Brightvision</div>
-          <h1 className="app-title">Email Checker</h1>
-          <p className="app-tagline">Analyze and generate high-performing B2B cold emails</p>
+      <header className="hero">
+        <div className="hero-badge">⚡ Free B2B Outbound Tool</div>
+        <h1 className="hero-title">
+          Stop sending cold emails
+          <br />
+          that <span className="hero-title-accent">sound</span> cold
+        </h1>
+        <p className="hero-subtitle">
+          Score your draft against 9 real outbound checks, or generate tailored
+          variants in seconds — built from the same framework we use on live campaigns.
+        </p>
+        <div className="hero-stats">
+          <div className="hero-stat">
+            <span className="hero-stat-number">9</span>
+            <span className="hero-stat-label">Quality checks</span>
+          </div>
+          <div className="hero-stat">
+            <span className="hero-stat-number">3</span>
+            <span className="hero-stat-label">AI-generated variants</span>
+          </div>
+          <div className="hero-stat">
+            <span className="hero-stat-number">100%</span>
+            <span className="hero-stat-label">Free to use</span>
+          </div>
         </div>
-        <nav className="app-nav">
+        <div className="hero-tabs">
           <button
             type="button"
-            className={`app-tab ${activeTab === 1 ? 'app-tab--active' : ''}`}
-            onClick={() => setActiveTab(1)}
+            className={`hero-tab ${activeTab === 'tab1' ? 'hero-tab--active' : ''}`}
+            onClick={() => setActiveTab('tab1')}
           >
-            Check Draft
+            ✏️ Review Draft
           </button>
           <button
             type="button"
-            className={`app-tab ${activeTab === 2 ? 'app-tab--active' : ''}`}
-            onClick={() => setActiveTab(2)}
+            className={`hero-tab ${activeTab === 'tab2' ? 'hero-tab--active' : ''}`}
+            onClick={() => setActiveTab('tab2')}
           >
-            Generate & Score
+            ⚡ Generate Drafts
           </button>
-        </nav>
+        </div>
       </header>
       <main className="app-main">
-        {activeTab === 1 && <Tab1CheckDraft />}
-        {activeTab === 2 && <Tab2GenerateScore />}
+        {activeTab === 'tab1' && <Tab1CheckDraft />}
+        {activeTab === 'tab2' && <Tab2GenerateScore />}
       </main>
     </div>
   );
