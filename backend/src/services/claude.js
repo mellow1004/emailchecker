@@ -105,6 +105,7 @@ CORE REQUIREMENTS:
 - Paragraph length: Maximum 35 words per paragraph
 - Tone: Confident, professional, conversational (not salesy)
 - No excessive enthusiasm or urgency language
+- Every draft must be written to score 85%+ on the Brightvision Email Content Checker. This means: zero spam words, zero duplicate words used 3+ times, exactly 4 paragraphs, 100-200 words, one question mark, no exclamation marks, no bullet points, no emojis.
 STRUCTURE:
 Paragraph 1: Hook/pain point that creates curiosity and relevance (make reader think "that's us")
 Paragraph 2: Solution description with specific value proposition
@@ -135,9 +136,25 @@ Also avoid:
 - Bullet points (write pain points in flowing sentences)
 - Multiple questions (only CTA question allowed)
 - Emojis
-DUPLICATE WORDS:
-- Never repeat the same meaningful word more than 2 times in the entire email (excluding stop words like: the, a, an, and, or, but, in, on, at, to, for, of, with, by)
-- This applies especially to words like: banks, reporting, management, platform, treasury, ALM — vary these actively
+DUPLICATE WORDS RULE — follow strictly:
+- Never use the same meaningful word more than 2 times in the entire email
+- If you have already used a word twice, you MUST use a synonym on the third occurrence — never repeat it a third time
+- This applies especially to these high-risk words that tend to repeat in banking/fintech emails:
+  banks → institutions, lenders, financial organisations, neobanks
+  banking → financial services, lending, the sector
+  reporting → compliance reporting, regulatory obligations, audit requirements
+  management → oversight, administration, governance
+  platform → system, environment, infrastructure, architecture
+  treasury → Treasury Management, front-to-back operations
+  ALM → Asset Liability Management, risk infrastructure
+  risk → exposure, vulnerability, financial risk
+  system → setup, environment, foundation, architecture
+  solution → approach, platform, workflow, capability
+  integration → consolidation, unification, connection
+  regulatory → compliance, regulatory-grade, reporting obligations
+  operational → day-to-day, administrative, process-level
+  infrastructure → setup, architecture, foundation, environment
+- Before finalising each draft, mentally scan the full email and count occurrences of each meaningful word. If any word appears 3+ times, replace the extra occurrences with synonyms from the list above or natural alternatives.
 WRITING STYLE:
 - Use short, punchy sentences
 - Avoid jargon unless industry-standard

@@ -37,6 +37,36 @@ QUALITY RULES:
 - Do not change the sign-off or greeting
 - Keep total word count between 100 and 200 words`;
 
+const DUPLICATE_WORDS_REWRITE_PROMPT = `You are an expert B2B cold email editor. Your job is to rewrite the email to eliminate word repetition.
+
+STRICT RULE: No meaningful word should appear more than 2 times in the entire email.
+
+Before rewriting, scan the full email and identify every word that appears 3+ times. Then rewrite those sentences using synonyms from this list:
+
+banks → institutions, lenders, financial organisations, neobanks
+banking → financial services, lending, the sector
+reporting → compliance reporting, regulatory obligations, audit requirements
+management → oversight, administration, governance
+platform → system, environment, infrastructure, architecture
+treasury → Treasury Management, front-to-back operations
+risk → exposure, vulnerability, financial risk
+system → setup, environment, foundation, architecture
+integration → consolidation, unification, connection
+operational → day-to-day, administrative, process-level
+infrastructure → setup, architecture, foundation, environment
+across → throughout, within, spanning, covering
+building → facility, site, property, premises
+systems → tools, platforms, environments, setups
+
+RULES:
+- Only change words that are repeated 3+ times — leave everything else identical
+- Keep all {{tokens}} intact
+- Keep tone, structure and meaning unchanged
+- Do not add new sentences or remove existing ones
+- Return only the rewritten email with no commentary
+
+After rewriting, verify that no meaningful word appears more than twice. If it still does, fix it before returning.`;
+
 const buildSpellcheckRewritePrompt = (locale) => {
   const ukRules = `
 APPLY UK (en-GB) SPELLING RULES:
@@ -93,7 +123,9 @@ export async function getRewrite(emailText, checkLabel, value, message, checkId,
   const systemPrompt =
     checkId === 'spellcheck'
       ? buildSpellcheckRewritePrompt(locale)
-      : REWRITE_SYSTEM_PROMPT;
+      : checkId === 'duplicate_words'
+        ? DUPLICATE_WORDS_REWRITE_PROMPT
+        : REWRITE_SYSTEM_PROMPT;
 
   const userContent = `Email:
 ${emailText || '(empty)'}

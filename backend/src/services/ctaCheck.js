@@ -11,9 +11,17 @@ Return ONLY a JSON object like this:
 }
 
 Scoring criteria:
-- GOOD: Direct, confident, low-friction ask. Examples: "Book a time here: {{CalendarLink}}" or "Would a 15-minute call work this week?"
-- WARNING: Somewhat hesitant or overly formal. Examples: "Would it be worthwhile to..." or "If you're open to it..."
-- BAD: Apologetic, vague, or no clear ask. Examples: "Let me know if you'd like to chat sometime" or "Feel free to reach out"
+
+- GOOD: Any of the following:
+  * Direct, confident meeting request with low friction. Examples: "Would a 15-minute call work this week?" or "I have 10 minutes Tuesday or Thursday — which works better?"
+  * A specific, diagnostic question about the prospect's current situation that invites a meaningful reply. Examples: "What's the biggest bottleneck preventing {{Company}} from scaling pipeline?" or "How is {{Company}} currently managing ALM and Treasury — one system or multiple tools?"
+  * A reply-based CTA that requires a specific, thoughtful response — not a yes/no answer.
+
+- WARNING: Somewhat hesitant, vague, or overly formal. Examples: "Would it be worthwhile to explore this?" or "Let me know if you'd like to chat sometime" or "Feel free to reach out if interested."
+
+- BAD: Apologetic, no clear ask, or multiple questions. Examples: "Just wanted to share this in case it's useful" or "Hope this helps, let me know!" or asking two questions at once.
+
+Key principle: A strong CTA either books a specific meeting OR asks a specific diagnostic question that requires a meaningful reply. Both are equally valid approaches in B2B cold email.
 
 Only evaluate the CTA sentence(s), not the full email.`;
 

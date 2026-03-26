@@ -70,7 +70,7 @@ function getParagraphs(text) {
 }
 
 function extractUrls(text) {
-  const urlRegex = /https?:\/\/[^\s<>"{}|\\^`[\]]+/gi;
+  const urlRegex = /https?:\/\/[^\s<>"{}|\\^`[\]]+|www\.[a-zA-Z0-9][a-zA-Z0-9-]*\.[a-zA-Z]{2,}(?:\/[^\s<>"{}|\\^`[\]]*)?/gi;
   const matches = text.match(urlRegex) || [];
   return [...new Set(matches)];
 }
@@ -164,7 +164,8 @@ function checkUniqueDomains(text, cfg, _rawText) {
   const urls = extractUrls(_rawText || text);
   const domains = new Set();
   for (const u of urls) {
-    const { domain } = parse(u);
+    const normalized = /^www\./i.test(u) ? `http://${u}` : u;
+    const { domain } = parse(normalized);
     if (domain) domains.add(domain);
   }
   const raw = _rawText || text;
