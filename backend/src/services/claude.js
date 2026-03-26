@@ -1,4 +1,5 @@
 import Anthropic from '@anthropic-ai/sdk';
+import { runChecks } from './checker.js';
 
 const GENERATE_SYSTEM_PROMPT = `You are an expert B2B cold email copywriter specializing in high-deliverability, high-conversion outreach for SaaS and B2B Tech industry services.
 
@@ -111,50 +112,64 @@ Paragraph 1: Hook/pain point that creates curiosity and relevance (make reader t
 Paragraph 2: Solution description with specific value proposition
 Paragraph 3: Social proof with named companies OR key differentiator. Use only client names or company references that appear in the provided page content; do not invent or make up company names.
 Paragraph 4: Clear, low-pressure CTA (meeting/demo request) — a question only, no links.
-DELIVERABILITY RULES — when these words appear, replace them with the suggested alternatives:
-- price → pricing, investment, commercial terms
-- call → quick chat, short conversation, brief discussion
+DELIVERABILITY RULES — FORBIDDEN WORDS (never use these, ever):
+The following words will cause the email to fail scoring. Do not use them under any circumstances:
+- free → complimentary, included
+- guaranteed / guarantee → what we typically see, typically
+- risk-free → low commitment
+- price → investment, pricing structure, commercial terms
+- cost → investment, spend, budget
 - get → receive, gain, achieve
 - solution → approach, platform, workflow, capability
-- open → receptive, available, open to exploring
+- open → receptive, available (avoid as CTA verb)
 - sales → revenue, commercial, go-to-market
 - access → use, visibility, availability
-- cost → investment, spend, budget
-- free → complimentary, included
-- guarantee → typically, often, we aim to
+- compare → evaluate, assess, review
+- call → quick chat, brief discussion, short conversation
 - transform → improve, modernize, strengthen
 - seamless → straightforward, well-integrated
 - cutting-edge → modern, purpose-built
 - industry-leading → well-regarded, widely used, established
 - best-in-class → high-performing, strong fit
 - game-changer → meaningful improvement, notable shift
-- immediately → from day one, at the outset, straight away, right away
-Never use these words even once (including immediately). Always use the safer alternative instead.
-Also avoid:
-- Exclamation marks
-- ALL CAPS words
-- Bullet points (write pain points in flowing sentences)
-- Multiple questions (only CTA question allowed)
-- Emojis
-DUPLICATE WORDS RULE — follow strictly:
-- Never use the same meaningful word more than 2 times in the entire email
-- If you have already used a word twice, you MUST use a synonym on the third occurrence — never repeat it a third time
-- This applies especially to these high-risk words that tend to repeat in banking/fintech emails:
-  banks → institutions, lenders, financial organisations, neobanks
-  banking → financial services, lending, the sector
-  reporting → compliance reporting, regulatory obligations, audit requirements
-  management → oversight, administration, governance
-  platform → system, environment, infrastructure, architecture
-  treasury → Treasury Management, front-to-back operations
-  ALM → Asset Liability Management, risk infrastructure
-  risk → exposure, vulnerability, financial risk
-  system → setup, environment, foundation, architecture
-  solution → approach, platform, workflow, capability
-  integration → consolidation, unification, connection
-  regulatory → compliance, regulatory-grade, reporting obligations
-  operational → day-to-day, administrative, process-level
-  infrastructure → setup, architecture, foundation, environment
-- Before finalising each draft, mentally scan the full email and count occurrences of each meaningful word. If any word appears 3+ times, replace the extra occurrences with synonyms from the list above or natural alternatives.
+- immediately → from day one, at the outset, straight away
+- instant → quick, fast, streamlined
+- unlock → enable, explore, discover
+- claim → request, confirm
+- discount → reduced rate, adjusted pricing
+- exclusive → tailored, dedicated
+- amazing → strong, solid, meaningful
+- incredible → notable, significant, measurable
+- trial → pilot, evaluation period
+- transform → improve, modernize, strengthen
+- breakthrough → step-change, meaningful improvement
+- revolutionary → new approach, updated method
+- increase sales → grow revenue, improve conversion
+- boost revenue → support revenue growth
+- quick win → early result
+- game-changer → meaningful improvement
+- seamless / frictionless → straightforward, integrated
+- just checking in → following up on [specific topic]
+- hope this finds you well → (remove entirely)
+- touching base → (use specific context instead)
+- circle back → follow up
+- cutting-edge / industry-leading → purpose-built, designed for [use]
+- world-class → well-regarded, widely adopted
+- supercharge → strengthen, improve
+- next-level → stronger, more effective
+- proven framework → established approach
+- low-hanging fruit → quick early wins
+- act now → worth exploring?
+- limited time → open to a quick look this quarter?
+- buy now / order now → (never use in B2B cold email)
+- ASAP → when convenient
+- urgent / urgency → (never use)
+
+DUPLICATE WORD RULE — CRITICAL:
+- Count every meaningful word in your draft
+- No meaningful word (excluding: the, a, an, and, or, but, in, on, at, to, for, of, with, as, by, from, that, this, is, are, was, were, be, been, have, has, had, will, would, can, could, should, may, might, do, does, did, it, its, we, our, you, your, their, they, them, which, who, what, how, when, where, if, not, no, all, any, each, more, most, also, both, just, than, then, so, up, out, about, into, through, during, before, after, above, below, between, such, per, via, across) may appear 3 or more times
+- Before finalizing each draft, mentally count: how many times does each word appear? If any word appears 3+ times, replace synonyms until each meaningful word appears maximum 2 times
+- Common offenders to watch: "team", "company", "workflow", "manage", "platform", "across", "process", "building", "current", "work"
 WRITING STYLE:
 - Use short, punchy sentences
 - Avoid jargon unless industry-standard
@@ -314,9 +329,62 @@ Return only a JSON array of exactly 3 objects, each with "subject", "body", and 
   const parsed = JSON.parse(jsonStr);
   const arr = Array.isArray(parsed) ? parsed : [];
 
-  return arr.slice(0, 3).map((d) => ({
-    subject: typeof d.subject === 'string' ? d.subject.trim() : '',
-    body: typeof d.body === 'string' ? d.body.trim() : '',
-    signoff: typeof d.signoff === 'string' ? d.signoff.trim() : '',
-  }));
+  // Score each draft and retry low-scoring ones up to 2 times
+  const scoredDrafts = await Promise.all(
+    arr.slice(0, 3).map(async (d) => ({
+      subject: typeof d.subject === 'string' ? d.subject.trim() : '',
+      body: typeof d.body === 'string' ? d.body.trim() : '',
+      signoff: typeof d.signoff === 'string' ? d.signoff.trim() : '',
+    }))
+  );
+
+  const finalDrafts = [];
+  for (const draft of scoredDrafts) {
+    const fullText = `${draft.subject}\n\n${draft.body}\n\n${draft.signoff}`;
+    const spellLocale = locale === 'UK' ? 'en-GB' : 'en-US';
+    const checked = await runChecks(fullText, null, { locale: spellLocale });
+
+    if (checked.score >= 85) {
+      finalDrafts.push(draft);
+      continue;
+    }
+
+    // Draft scored below 85 — retry once with failure context
+    const failedChecks = checked.results
+      .filter((r) => r.status !== 'GOOD')
+      .map((r) => `- ${r.label}: ${r.message}${r.matchedTerms ? ' (flagged: ' + r.matchedTerms.join(', ') + ')' : ''}${r.duplicateList ? ' (repeated: ' + r.duplicateList.map((d) => d.word + ' x' + d.count).join(', ') + ')' : ''}`)
+      .join('\n');
+
+    const retryContent = userContent + `\n\nIMPORTANT: Your previous draft scored ${checked.score}% — below the required 85%. Fix these specific issues and rewrite the draft:\n${failedChecks}\n\nReturn only 1 object (not an array) with "subject", "body", "signoff". No other text.`;
+
+    const retryMessage = await client.messages.create({
+      model: 'claude-sonnet-4-6',
+      max_tokens: 2048,
+      system: GENERATE_SYSTEM_PROMPT,
+      messages: [{ role: 'user', content: retryContent }],
+    });
+
+    const retryRaw = retryMessage.content?.[0]?.type === 'text' ? retryMessage.content[0].text.trim() : '';
+    if (retryRaw) {
+      try {
+        let retryJson = retryRaw;
+        const cb = retryRaw.match(/```(?:json)?\s*([\s\S]*?)```/);
+        if (cb) retryJson = cb[1].trim();
+        const retried = JSON.parse(retryJson);
+        const single = Array.isArray(retried) ? retried[0] : retried;
+        if (single?.body) {
+          finalDrafts.push({
+            subject: typeof single.subject === 'string' ? single.subject.trim() : draft.subject,
+            body: typeof single.body === 'string' ? single.body.trim() : draft.body,
+            signoff: typeof single.signoff === 'string' ? single.signoff.trim() : draft.signoff,
+          });
+          continue;
+        }
+      } catch {}
+    }
+    // If retry failed to parse, keep original
+    finalDrafts.push(draft);
+  }
+
+  return finalDrafts;
 }
