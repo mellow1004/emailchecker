@@ -65,124 +65,141 @@ export default function Tab2GenerateScore() {
   };
 
   return (
-    <div className="tab2-layout">
-      <section className="tab2-editor">
-        <label className="tab2-label" htmlFor="tab2-url">
-          Company or product URL
-        </label>
-        <input
-          id="tab2-url"
-          type="url"
-          className="tab2-input"
-          placeholder="Enter company or product URL..."
-          value={url}
-          onChange={(e) => setUrl(e.target.value)}
-          disabled={loading}
-        />
-        <p className="tab2-description">
-          Enter a company URL and we'll generate 3 ready-to-send cold email drafts, each automatically scored against our 9 checks.
-        </p>
-        <div className="tab2-targeting">
-          <h3 className="tab2-targeting-title">Targeting & context</h3>
-          <p className="tab2-targeting-subtitle">Optional — helps tailor the generated emails</p>
-          <label className="tab2-label" htmlFor="tab2-prospect-url">
-            Prospect company URL
-          </label>
-          <p className="tab2-targeting-hint">Optional — we'll read their website to tailor the email to them</p>
-          <input
-            id="tab2-prospect-url"
-            type="url"
-            className="tab2-input"
-            placeholder="e.g. https://prospectcompany.com"
-            value={prospectUrl}
-            onChange={(e) => setProspectUrl(e.target.value)}
-            disabled={loading}
-          />
-          <label className="tab2-label" htmlFor="tab2-target-industry">
-            Target industry
-          </label>
-          <input
-            id="tab2-target-industry"
-            type="text"
-            className="tab2-input"
-            placeholder="e.g. Banking, Fintech, Insurance"
-            value={targetIndustry}
-            onChange={(e) => setTargetIndustry(e.target.value)}
-            disabled={loading}
-          />
-          <label className="tab2-label" htmlFor="tab2-target-role">
-            Target role / department
-          </label>
-          <input
-            id="tab2-target-role"
-            type="text"
-            className="tab2-input"
-            placeholder="e.g. CFO, Head of Treasury, IT Director"
-            value={targetRole}
-            onChange={(e) => setTargetRole(e.target.value)}
-            disabled={loading}
-          />
-          <label className="tab2-label" htmlFor="tab2-additional-context">
-            Additional context
-          </label>
-          <textarea
-            id="tab2-additional-context"
-            className="tab2-input tab2-context-textarea"
-            placeholder="e.g. Focus on regulatory compliance challenges, targeting banks with 50–500 employees"
-            value={context}
-            onChange={(e) => setContext(e.target.value)}
-            rows={3}
-            disabled={loading}
-          />
-        </div>
-        <div className="tab1-spelling">
-          <span className="tab1-spelling-label">Spelling:</span>
-          <button
-            type="button"
-            className={`tab1-spelling-btn ${locale === 'US' ? 'tab1-spelling-btn--active' : ''}`}
-            onClick={() => setLocale('US')}
-            disabled={loading}
-          >
-            US
-          </button>
-          <button
-            type="button"
-            className={`tab1-spelling-btn ${locale === 'UK' ? 'tab1-spelling-btn--active' : ''}`}
-            onClick={() => setLocale('UK')}
-            disabled={loading}
-          >
-            UK
-          </button>
-        </div>
-        {needsContext && (
-          <div className="tab2-context-wrap">
-            <p className="tab2-context-message">
-              We couldn't find enough information from this URL. Please add a brief product description, target audience, and key value proposition in the Additional context field above.
+    <div className="tab-content">
+      <div className="tab-layout">
+        <div className="tab-layout-left">
+          <section className="input-card">
+            <p className="input-card-description">
+              Enter your company URL and optional targeting details — we'll generate 3 scored cold email variants tailored to your offer.
             </p>
-          </div>
-        )}
-        <button
-          type="button"
-          className="tab2-submit"
-          disabled={!canSubmit}
-          onClick={generate}
-        >
-          {loading ? 'Generating…' : 'Generate emails'}
-        </button>
-        {error && <p className="tab2-error">{error}</p>}
-      </section>
 
-      <aside className="tab2-results">
-        {!drafts && !loading && (
-          <div className="tab2-results-empty">
-            <div className="tab2-results-empty-icon" aria-hidden>
-              <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M32 12L52 24v24L32 52 12 48V24L32 12z" stroke="currentColor" strokeWidth="2" fill="none" opacity="0.4" />
-                <path d="M32 12v40M12 24l20 12 20-12M12 48l20-12 20 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.6" />
-              </svg>
+            <div className="input-field-group">
+              <label className="input-label" htmlFor="tab2-url">Company or product URL</label>
+              <span className="input-hint">Used to understand your offer and generate relevant drafts</span>
+              <input
+                id="tab2-url"
+                className="input-field"
+                type="url"
+                placeholder="e.g. https://yourcompany.com"
+                value={url}
+                onChange={(e) => setUrl(e.target.value)}
+                disabled={loading}
+              />
             </div>
-            <h3 className="tab2-results-empty-title">Drafts will appear here</h3>
-            <p className="tab2-results-empty-text">Enter a company or product URL and click <strong>Generate emails</strong> to get 3 cold email variants, each scored against our 9 checks.</p>
+
+            <div className="input-targeting">
+              <div className="input-targeting-header">
+                <span className="input-targeting-title">Targeting & context</span>
+                <span className="input-hint">— optional, helps tailor the output</span>
+              </div>
+
+              <div className="input-field-group">
+                <label className="input-label" htmlFor="tab2-prospect-url">Prospect company URL</label>
+                <input
+                  id="tab2-prospect-url"
+                  className="input-field"
+                  type="url"
+                  placeholder="e.g. https://prospectcompany.com"
+                  value={prospectUrl}
+                  onChange={(e) => setProspectUrl(e.target.value)}
+                  disabled={loading}
+                />
+              </div>
+
+              <div className="input-row">
+                <div className="input-field-group">
+                  <label className="input-label" htmlFor="tab2-target-industry">Target industry</label>
+                  <input
+                    id="tab2-target-industry"
+                    className="input-field"
+                    type="text"
+                    placeholder="e.g. Banking, Fintech, SaaS"
+                    value={targetIndustry}
+                    onChange={(e) => setTargetIndustry(e.target.value)}
+                    disabled={loading}
+                  />
+                </div>
+                <div className="input-field-group">
+                  <label className="input-label" htmlFor="tab2-target-role">Target role / department</label>
+                  <input
+                    id="tab2-target-role"
+                    className="input-field"
+                    type="text"
+                    placeholder="e.g. CFO, Head of Treasury"
+                    value={targetRole}
+                    onChange={(e) => setTargetRole(e.target.value)}
+                    disabled={loading}
+                  />
+                </div>
+              </div>
+
+              <div className="input-field-group">
+                <label className="input-label" htmlFor="tab2-additional-context">Additional context</label>
+                <textarea
+                  id="tab2-additional-context"
+                  className="input-field input-textarea input-textarea--short"
+                  placeholder="e.g. Focus on regulatory complexity, targeting banks with 50–500 employees"
+                  value={context}
+                  onChange={(e) => setContext(e.target.value)}
+                  disabled={loading}
+                />
+              </div>
+            </div>
+
+            <div className="input-footer">
+              <div className="spelling-toggle">
+                <span className="spelling-label">Spelling:</span>
+                <button
+                  type="button"
+                  className={`spelling-btn ${locale === 'US' ? 'spelling-btn--active' : ''}`}
+                  onClick={() => setLocale('US')}
+                  disabled={loading}
+                >
+                  US
+                </button>
+                <button
+                  type="button"
+                  className={`spelling-btn ${locale === 'UK' ? 'spelling-btn--active' : ''}`}
+                  onClick={() => setLocale('UK')}
+                  disabled={loading}
+                >
+                  UK
+                </button>
+              </div>
+            </div>
+
+            {needsContext && (
+              <div className="tab2-context-wrap">
+                <p className="tab2-context-message">
+                  We couldn't find enough information from this URL. Please add a brief product description, target audience, and key value proposition in the Additional context field above.
+                </p>
+              </div>
+            )}
+
+            <button
+              type="button"
+              className="btn-run"
+              onClick={generate}
+              disabled={!url.trim() || loading}
+            >
+              {loading ? 'Generating...' : 'Generate emails'}
+            </button>
+            {error && <p className="tab2-error">{error}</p>}
+          </section>
+        </div>
+
+        <div className="tab-layout-right">
+          <aside className="tab2-results">
+        {!drafts && !loading && (
+          <div className="results-empty">
+            <div className="results-empty-icon">⚡</div>
+            <h3 className="results-empty-title">Drafts will appear here</h3>
+            <ul className="results-empty-list">
+              <li>✓ 3 tailored cold email variants</li>
+              <li>✓ A score for each draft</li>
+              <li>✓ Notes on strengths and weaknesses</li>
+              <li>✓ Copy you can edit and use immediately</li>
+            </ul>
           </div>
         )}
         {loading && (
@@ -285,11 +302,13 @@ export default function Tab2GenerateScore() {
           </div>
         )}
         {drafts && drafts.length === 0 && !loading && (
-          <div className="tab2-results-empty">
+          <div className="results-empty">
             <p className="tab2-results-empty-text">No drafts were returned. Try another URL.</p>
           </div>
         )}
-      </aside>
+          </aside>
+        </div>
+      </div>
     </div>
   );
 }
