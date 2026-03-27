@@ -32,24 +32,24 @@ export default function App() {
             <span className="hero-stat-label">Free to use</span>
           </div>
         </div>
-        <div className="hero-tabs">
+      </header>
+      <main className="app-main">
+        <div className="tool-tabs">
           <button
             type="button"
-            className={`hero-tab ${activeTab === 'tab1' ? 'hero-tab--active' : ''}`}
+            className={`tool-tab ${activeTab === 'tab1' ? 'tool-tab--active' : ''}`}
             onClick={() => setActiveTab('tab1')}
           >
             ✏️ Review Draft
           </button>
           <button
             type="button"
-            className={`hero-tab ${activeTab === 'tab2' ? 'hero-tab--active' : ''}`}
+            className={`tool-tab ${activeTab === 'tab2' ? 'tool-tab--active' : ''}`}
             onClick={() => setActiveTab('tab2')}
           >
             ⚡ Generate Drafts
           </button>
         </div>
-      </header>
-      <main className="app-main">
         {activeTab === 'tab1' && <Tab1CheckDraft />}
         {activeTab === 'tab2' && <Tab2GenerateScore />}
       </main>
