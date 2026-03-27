@@ -210,43 +210,38 @@ Best regards,
 {{SenderName}}
 {{CompanyWebsite}}
 CTA RULES — follow these strictly:
-
-Structure rules:
-- Never include two questions in a single CTA. One clear action only.
-- Never write a CTA that can be answered with "yes" or "no." It must require a meaningful response or action.
-- Every CTA must contain one specific, concrete action or question.
-- Keep the CTA to one sentence, two at most. Brevity wins.
-- Start the CTA with a verb or a specific question word (How, What, Which, When). Lead with the action, not the explanation.
-- Never include calendar links or booking links — the CTA is a question or reply-based action only.
-
-Tone rules:
-- Make the action feel low-effort and low-risk.
-- No urgency language in the CTA.
-- Avoid vague language like "learn more" or "get started." Be specific about what happens after they reply.
-- Use active voice. "Reserve your spot" not "Your spot can be reserved."
-- Match the CTA energy to the email tone — conversational email = conversational CTA.
+- One question only — never two questions in a CTA
+- Never use "I'd be glad to", "I'd love to", "feel free to", "don't hesitate" — these sound tentative and weak
+- Never write "When works for you?" — this is grammatically incorrect
+- Use confident, direct phrasing: "Would Tuesday or Thursday work for a 15-minute call?"
+- Start with the action or question — not an explanation
+- Reference {{Company}} in the CTA when possible
+- No calendar links — reply-based only
 
 CTA STYLE RULES — each of the 3 drafts must use a different CTA style:
 
 Draft 1 — Specific day/time offer:
-Example: "If these challenges sound familiar, I have 10 minutes available Tuesday or Thursday. Which works better?"
+"Would Tuesday or Thursday work for a 15-minute walkthrough of how this could apply to {{Company}}?"
 
 Draft 2 — Diagnostic question about their current situation:
-Example: "How is {{Company}} currently managing [relevant workflow] — one system, or multiple tools stitched together?"
-Adapt the question to the specific product and company context from the URL.
+"How is {{Company}} currently handling [relevant workflow] — one system, or multiple tools stitched together?"
 
-Draft 3 — Pipeline or outcome focused question:
-Example: "What's the biggest bottleneck preventing {{Company}} from [achieving relevant outcome]?"
-Adapt to the specific product context.
+Draft 3 — Outcome/bottleneck question:
+"What is the biggest friction point preventing {{Company}} from [achieving relevant outcome] right now?"
 
-GOOD CTA EXAMPLES — use these as inspiration:
-- "If these challenges sound familiar, I have 10 minutes available Tuesday or Thursday. Which works better?"
-- "How is your team currently managing ICP accuracy and data quality across your outbound sequences?"
-- "How does your team currently measure the effectiveness of outbound sequencing across different buyer segments?"
-- "Does Tuesday or Thursday next week work for a quick 15-minute conversation about your buyer personas and Q2 objectives?"
-- "What's the biggest bottleneck preventing {{Company}} from scaling qualified pipeline consistently?"
+GOOD CTA EXAMPLES — these all score GOOD, use them as your benchmark:
+- "Would Tuesday or Thursday work for a 15-minute call, {{FirstName}}?"
+- "How is {{Company}} currently managing ALM and Treasury — one platform or multiple tools?"
+- "What is the biggest bottleneck preventing {{Company}} from scaling qualified pipeline consistently?"
+- "When would a 15-minute conversation work to walk through how {{Company}} currently structures this area?"
+- "Does Tuesday or Thursday work for a quick 15-minute conversation about your Q2 outbound objectives?"
 
-Each CTA style must be fundamentally different — not just small wording variations of the same approach.
+BAD CTA EXAMPLES — never write these:
+- "I'd be glad to walk you through..." (tentative)
+- "When works for you?" (grammatically wrong)
+- "Feel free to reach out if interested" (no clear ask)
+- "Let me know if you'd like to chat" (vague)
+- "Would it be worth exploring?" (too soft)
 EXAMPLES (high-scoring reference emails — study structure, tone, sentence length, social proof style, and CTA phrasing; generate emails that match this quality and style):
 EXAMPLE 1 (Score 90 — Precisely Contracts):
 Subject: Contract process for {{Company}}

@@ -18,7 +18,7 @@ function shouldSkipMatch(word) {
  * @param {string[]} words - Words flagged by LanguageTool
  * @returns {Promise<Set<string>>} Set of words (lowercase) that Claude classified as PROPER_NOUN
  */
-async function classifyWordsWithClaude(words) {
+async function classifyWordsWithClaude(words, locale = 'en-US') {
   const unique = [...new Set(words)].filter(Boolean);
   if (unique.length === 0) return new Set();
 
@@ -32,7 +32,10 @@ async function classifyWordsWithClaude(words) {
 
   try {
     const client = new Anthropic();
-    const userContent = `Are any of these words brand names, company names, product names, or proper nouns? Return JSON with each word mapped to either "PROPER_NOUN" or "SPELLING_ERROR". Example: {"bunq": "PROPER_NOUN", "teh": "SPELLING_ERROR"}.\nWords: ${unique.join(', ')}\n\nReturn only the JSON object, no other text.`;
+    const localeNote = locale === 'en-GB'
+      ? 'Note: The email uses UK English spelling. Words like "optimisation", "optimised", "colour", "behaviour", "licence", "centre", "analyse" are correctly spelled in UK English and should NOT be classified as SPELLING_ERROR.'
+      : 'Note: The email uses US English spelling.';
+    const userContent = `${localeNote}\n\nAre any of these words brand names, company names, product names, or proper nouns? Return JSON with each word mapped to either "PROPER_NOUN" or "SPELLING_ERROR". Example: {"bunq": "PROPER_NOUN", "teh": "SPELLING_ERROR"}.\nWords: ${unique.join(', ')}\n\nReturn only the JSON object, no other text.`;
 
     const message = await client.messages.create({
       model: 'claude-sonnet-4-6',
@@ -117,7 +120,7 @@ export async function checkSpelling(text, locale = 'en-US') {
 
   const realWordMatches = enriched.filter((m) => !shouldSkipMatch(m._word));
   const flaggedWords = realWordMatches.map((m) => m._word).filter(Boolean);
-  const properNouns = await classifyWordsWithClaude(flaggedWords);
+  const properNouns = await classifyWordsWithClaude(flaggedWords, locale);
 
   const filtered = realWordMatches.filter((m) => !properNouns.has((m._word || '').toLowerCase()));
   const filteredOut = realWordMatches.filter((m) => properNouns.has((m._word || '').toLowerCase()));
