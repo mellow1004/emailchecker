@@ -103,7 +103,7 @@
 }
 
 html {
-  font-size: 16px;
+  font-size: 14px;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -264,12 +264,12 @@ textarea::placeholder {
 /* Hero */
 .hero {
   background: linear-gradient(135deg, #1A3A2E 0%, #2D5A3D 50%, #3A7A4A 100%);
-  padding: 80px var(--spacing-xl) 60px;
+  padding: 48px var(--spacing-xl) 36px;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
 }
 
 .hero-badge {
@@ -286,7 +286,7 @@ textarea::placeholder {
 }
 
 .hero-title {
-  font-size: clamp(36px, 5vw, 64px);
+  font-size: clamp(28px, 4vw, 44px);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-white);
   line-height: 1.1;
@@ -299,7 +299,7 @@ textarea::placeholder {
 }
 
 .hero-subtitle {
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-base);
   color: var(--color-text-white-muted);
   max-width: 580px;
   line-height: var(--line-height-relaxed);
@@ -307,7 +307,7 @@ textarea::placeholder {
 
 .hero-stats {
   display: flex;
-  gap: var(--spacing-2xl);
+  gap: var(--spacing-xl);
   margin-top: var(--spacing-sm);
 }
 
@@ -319,7 +319,7 @@ textarea::placeholder {
 }
 
 .hero-stat-number {
-  font-size: var(--font-size-2xl);
+  font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-accent);
   line-height: 1;
@@ -342,7 +342,7 @@ textarea::placeholder {
 }
 
 .hero-tab {
-  padding: 10px 24px;
+  padding: 8px 20px;
   border: none;
   border-radius: var(--radius-full);
   font-size: var(--font-size-sm);
@@ -367,7 +367,7 @@ textarea::placeholder {
 .app-main {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 32px 24px;
+  padding: 20px 24px;
   background: var(--bv-bg-warm);
   background-image:
     radial-gradient(circle at 1px 1px, rgba(0, 0, 0, 0.03) 1px, transparent 0);
@@ -1652,7 +1652,7 @@ textarea::placeholder {
 
 /* Landing page sections */
 .lp-section {
-  padding: 72px 0;
+  padding: 48px 0;
 }
 
 .lp-section .container {
@@ -1701,7 +1701,7 @@ textarea::placeholder {
   font-size: var(--font-size-md);
   color: var(--color-text-secondary);
   max-width: 580px;
-  margin-bottom: var(--spacing-2xl);
+  margin-bottom: var(--spacing-xl);
   line-height: var(--line-height-relaxed);
   text-align: center;
 }
@@ -1721,7 +1721,7 @@ textarea::placeholder {
   background-color: var(--color-bg-card);
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border);
-  padding: var(--spacing-xl);
+  padding: var(--spacing-lg);
 }
 
 .lp-step--featured {
@@ -1808,7 +1808,7 @@ textarea::placeholder {
   background-color: rgba(255,255,255,0.05);
   border-radius: var(--radius-lg);
   border: 1px solid rgba(255,255,255,0.1);
-  padding: var(--spacing-xl);
+  padding: var(--spacing-lg);
   text-align: center;
 }
 
@@ -1866,7 +1866,7 @@ textarea::placeholder {
   background-color: var(--color-bg-card);
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border);
-  padding: var(--spacing-xl);
+  padding: var(--spacing-lg);
 }
 
 .lp-audience-card--featured {
@@ -1895,7 +1895,7 @@ textarea::placeholder {
 /* CTA section */
 .lp-cta {
   background-color: var(--color-bg-dark);
-  padding: var(--spacing-3xl) 0;
+  padding: var(--spacing-2xl) 0;
   text-align: center;
 }
 
