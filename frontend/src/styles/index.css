@@ -230,6 +230,10 @@ textarea {
   resize: vertical;
 }
 
+textarea {
+  min-height: 120px;
+}
+
 input[type="text"]:focus,
 input[type="url"]:focus,
 textarea:focus {
@@ -361,6 +365,7 @@ textarea::placeholder {
   cursor: pointer;
   transition: all 0.2s ease;
   margin-bottom: -1px;
+  outline: none;
 }
 
 .tool-tab:hover {
@@ -371,6 +376,11 @@ textarea::placeholder {
   color: var(--color-text-primary);
   font-weight: var(--font-weight-semibold);
   border-bottom: 2px solid var(--color-accent);
+  background: transparent;
+  box-shadow: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
 }
 
 /* Tab content wrapper */
@@ -399,7 +409,7 @@ textarea::placeholder {
   background-color: var(--color-bg-card);
   border-radius: var(--radius-lg);
   border: 1px solid var(--color-border);
-  padding: var(--spacing-xl);
+  padding: 20px;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-lg);
@@ -622,7 +632,7 @@ textarea::placeholder {
 .tab1-editor {
   background: var(--bv-surface);
   border-radius: var(--bv-radius);
-  padding: 28px;
+  padding: 20px;
   box-shadow: var(--bv-shadow-md);
   border: 1px solid var(--bv-border);
 }
@@ -784,7 +794,7 @@ textarea::placeholder {
 .tab1-results {
   background: var(--bv-surface);
   border-radius: var(--bv-radius);
-  padding: 28px;
+  padding: 20px;
   box-shadow: var(--bv-shadow-md);
   border: 1px solid var(--bv-border);
   position: sticky;
@@ -1205,7 +1215,7 @@ textarea::placeholder {
 .tab2-editor {
   background: var(--bv-surface);
   border-radius: var(--bv-radius);
-  padding: 28px;
+  padding: 20px;
   box-shadow: var(--bv-shadow-md);
   border: 1px solid var(--bv-border);
 }
@@ -1364,7 +1374,7 @@ textarea::placeholder {
 .tab2-results {
   background: var(--bv-surface);
   border-radius: var(--bv-radius);
-  padding: 28px;
+  padding: 20px;
   box-shadow: var(--bv-shadow-md);
   border: 1px solid var(--bv-border);
   position: sticky;
