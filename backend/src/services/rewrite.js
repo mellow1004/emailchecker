@@ -32,10 +32,13 @@ QUALITY RULES:
 - Never add calendar links or booking links in rewrites
 - Do not repeat any meaningful word more than 2 times in the rewritten email
 - Keep paragraphs under 35 words
+- CRITICAL — when fixing "words per paragraph": shorten the long paragraph by cutting unnecessary words and tightening sentences. NEVER split one paragraph into two. The number of paragraphs must stay exactly the same as in the original email.
+- CRITICAL — paragraph count rule: the email body should have exactly 4 paragraphs (not counting the greeting line "Hi {{FirstName}}," and not counting the sign-off "Best regards," and sender lines). These lines are NOT paragraphs. Do not add or remove paragraphs.
 - Do not add new links or domains unless the check specifically requires it
 - When fixing a missing link issue (e.g. unique_domains): add {{CompanyWebsite}} on a new line in the signature after {{SenderName}} — do not add calendar links or inline URLs
 - Do not change the sign-off or greeting
-- Keep total word count between 100 and 200 words`;
+- Keep total word count between 100 and 200 words
+- After rewriting, count the body paragraphs (excluding greeting and sign-off). If the count changed from the original, fix it before returning`;
 
 const DUPLICATE_WORDS_REWRITE_PROMPT = `You are an expert B2B cold email editor. Your job is to rewrite the email to eliminate word repetition.
 
