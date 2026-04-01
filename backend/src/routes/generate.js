@@ -53,6 +53,42 @@ router.post('/', async (req, res) => {
       const fullText = [d.body, d.signoff].filter(Boolean).join('\n\n');
       const spellLocale = locale === 'UK' ? 'en-GB' : 'en-US';
       const checkResult = await runChecks(fullText, null, { locale: spellLocale });
+
+      // Remove unique_domains from results for scoring purposes in Tab 2
+      const tab2Results = checkResult.results.map((r) =>
+        r.id === 'unique_domains'
+          ? {
+              ...r,
+              status: 'GOOD',
+              message: 'Adding a relevant link in your signature will improve deliverability.',
+              _advisoryOnly: true,
+            }
+          : r
+      );
+
+      // Recalculate score without unique_domains penalty
+      const weights = {
+        word_count: 13,
+        paragraphs: 13,
+        words_per_paragraph: 11,
+        letters_per_word: 6,
+        spam_words_categories: 10,
+        spam_words: 10,
+        unique_domains: 0,
+        spellcheck: 7,
+        duplicate_words: 10,
+        cta_strength: 12,
+      };
+      let weightedSum = 0;
+      for (const r of tab2Results) {
+        const w = weights[r.id] ?? 0;
+        if (r.status === 'GOOD') weightedSum += w;
+        else if (r.status === 'WARNING') weightedSum += w * 0.5;
+      }
+      const badCount = tab2Results.filter((r) => r.status === 'BAD').length;
+      const tab2Score = Math.max(0, Math.min(100, Math.round(weightedSum - badCount * 5)));
+      const tab2Level = tab2Score >= 80 ? 'good' : tab2Score >= 60 ? 'warning' : 'bad';
+
       const subject = d.subject || '';
       const subjectCheck = checkSubjectLine(subject);
       const spamCheck = (subjectCheck.checks || []).find((c) => c.id === 'subject_spam_words') || {};
@@ -61,9 +97,9 @@ router.post('/', async (req, res) => {
         subject: d.subject,
         body: d.body,
         signoff: d.signoff,
-        score: checkResult.score,
-        level: checkResult.level,
-        results: checkResult.results,
+        score: tab2Score,
+        level: tab2Level,
+        results: tab2Results,
         subjectAnalysis: {
           spamWords: {
             status: spamCheck.status || 'GOOD',
@@ -81,7 +117,8 @@ router.post('/', async (req, res) => {
       }
     }
 
-    res.json({ drafts });
+    const sortedDrafts = [...drafts].sort((a, b) => (b.score ?? 0) - (a.score ?? 0));
+    res.json({ drafts: sortedDrafts });
   } catch (err) {
     console.error('[generate]', err.message);
     const status = err.response?.status === 404 ? 404 : err.code === 'ENOTFOUND' ? 404 : 500;
