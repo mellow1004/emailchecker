@@ -31,7 +31,7 @@ function buildUserMessage(emailText, results) {
   nonGood.forEach((r) => {
     if (r.id === 'words_per_paragraph') {
       lines.push(
-        `[${r.id}] ${r.label}: ${r.status} (value: ${r.value ?? 'n/a'}). INSTRUCTION: The longest body paragraph contains ${r.value} words. You MUST suggest shortening it by removing unnecessary words. You MUST NOT suggest splitting it into two paragraphs. Paragraph count must stay at 4.`
+        `[${r.id}] ${r.label}: ${r.status} (value: ${r.value ?? 'n/a'}). INSTRUCTION: The longest body paragraph (excluding greeting line "Hi {{FirstName}}," and sign-off lines) contains ${r.value} words. Count only body paragraphs — the greeting is paragraph 0, not paragraph 1. So the first body paragraph is paragraph 1, second is paragraph 2, etc. Shorten the longest body paragraph by tightening wording — do NOT suggest splitting into two paragraphs. Paragraph count must stay at 4.`
       );
     } else {
       lines.push(`[${r.id}] ${r.label}: ${r.status} (value: ${r.value ?? 'n/a'}). Message: ${r.message}`);
