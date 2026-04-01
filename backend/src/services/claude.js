@@ -113,6 +113,7 @@ Paragraph 2: Solution description with specific value proposition
 Paragraph 3: Social proof with named companies OR key differentiator. Use only client names or company references that appear in the provided page content; do not invent or make up company names.
 Paragraph 4: Clear, low-pressure CTA (meeting/demo request) — a question only, no links.
 DELIVERABILITY RULES — FORBIDDEN WORDS (never use these, ever):
+- Never use em dashes (—) anywhere in the email. Use a comma, period, or rewrite the sentence instead.
 The following words will cause the email to fail scoring. Do not use them under any circumstances:
 - free → complimentary, included
 - guaranteed / guarantee → what we typically see, typically
@@ -325,11 +326,12 @@ Return only a JSON array of exactly 3 objects, each with "subject", "body", and 
   const arr = Array.isArray(parsed) ? parsed : [];
 
   // Score each draft and retry low-scoring ones up to 2 times
+  const stripEmDash = (str) => (typeof str === 'string' ? str.replace(/—/g, ',') : str);
   const scoredDrafts = await Promise.all(
     arr.slice(0, 3).map(async (d) => ({
-      subject: typeof d.subject === 'string' ? d.subject.trim() : '',
-      body: typeof d.body === 'string' ? d.body.trim() : '',
-      signoff: typeof d.signoff === 'string' ? d.signoff.trim() : '',
+      subject: stripEmDash(typeof d.subject === 'string' ? d.subject.trim() : ''),
+      body: stripEmDash(typeof d.body === 'string' ? d.body.trim() : ''),
+      signoff: stripEmDash(typeof d.signoff === 'string' ? d.signoff.trim() : ''),
     }))
   );
 
@@ -369,9 +371,13 @@ Return only a JSON array of exactly 3 objects, each with "subject", "body", and 
         const single = Array.isArray(retried) ? retried[0] : retried;
         if (single?.body) {
           finalDrafts.push({
-            subject: typeof single.subject === 'string' ? single.subject.trim() : draft.subject,
-            body: typeof single.body === 'string' ? single.body.trim() : draft.body,
-            signoff: typeof single.signoff === 'string' ? single.signoff.trim() : draft.signoff,
+            subject: stripEmDash(
+              typeof single.subject === 'string' ? single.subject.trim() : draft.subject
+            ),
+            body: stripEmDash(typeof single.body === 'string' ? single.body.trim() : draft.body),
+            signoff: stripEmDash(
+              typeof single.signoff === 'string' ? single.signoff.trim() : draft.signoff
+            ),
           });
           continue;
         }

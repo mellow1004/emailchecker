@@ -8,7 +8,11 @@ Include one object per non-GOOD check (status BAD, WARNING, or PENDING). Use the
 
 For unique_domains WARNING with 0 links: suggest adding the sender's company website as a signature link (e.g. www.company.com) for credibility and trust — not a calendar booking link.
 
-For spellcheck: when Flagged words are provided, your suggestion must reference those specific words. Explain for each (or as a group) whether they are US/UK spelling variants (e.g. colour vs color) or genuine spelling/grammar errors, and give a concrete fix — do not guess at other possible issues.`;
+For spellcheck: when Flagged words are provided, your suggestion must reference those specific words. Explain for each (or as a group) whether they are US/UK spelling variants (e.g. colour vs color) or genuine spelling/grammar errors, and give a concrete fix — do not guess at other possible issues.
+
+For words_per_paragraph: never suggest splitting a paragraph into two. Always suggest shortening the paragraph by tightening the wording to stay under 35 words. The email should maintain exactly 4 body paragraphs.
+
+Important paragraph counting context: The greeting line ("Hi {{FirstName}},") and the sign-off lines ("Kind regards,", "Best regards,", sender name, website) are NOT body paragraphs and are not counted. When referencing paragraphs in your suggestions, only count and reference the body content paragraphs. So "the first paragraph" means the first content paragraph after the greeting, not the greeting itself.`;
 
 /**
  * Build user message from email text and check results for Claude.

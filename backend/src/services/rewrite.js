@@ -27,6 +27,7 @@ FORMATTING RULES — never introduce these in your rewrite:
 - No emojis
 - No more than one question mark in the entire email
 - No ALL CAPS words (except approved acronyms: API, CRM, ALM, IRRBB, SaaS, B2B)
+- Never use em dashes (—) anywhere in the email. Use a comma, period, or rewrite the sentence instead.
 
 QUALITY RULES:
 - Never add calendar links or booking links in rewrites
@@ -66,6 +67,7 @@ RULES:
 - Keep all {{tokens}} intact
 - Keep tone, structure and meaning unchanged
 - Do not add new sentences or remove existing ones
+- Never use em dashes (—) anywhere in the email. Use a comma, period, or rewrite the sentence instead.
 - Return only the rewritten email with no commentary
 
 After rewriting, verify that no meaningful word appears more than twice. If it still does, fix it before returning.`;
@@ -155,7 +157,8 @@ Rewrite the email to fix this specific issue only.`;
       response.content[0].type === 'text'
         ? response.content[0].text
         : '';
-    return (rawText || '').trim();
+    const stripEmDash = (str) => (typeof str === 'string' ? str.replace(/—/g, ',') : str);
+    return stripEmDash((rawText || '').trim());
   } catch (err) {
     console.error('[rewrite] Claude error:', err.message);
     throw err;
