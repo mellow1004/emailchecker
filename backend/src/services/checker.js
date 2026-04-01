@@ -72,6 +72,7 @@ function getParagraphs(text) {
 function extractUrls(text) {
   const urlRegex = /https?:\/\/[^\s<>"{}|\\^`[\]]+|www\.[a-zA-Z0-9][a-zA-Z0-9-]*\.[a-zA-Z]{2,}(?:\/[^\s<>"{}|\\^`[\]]*)?/gi;
   const matches = text.match(urlRegex) || [];
+  console.log('[extractUrls] found:', matches);
   return [...new Set(matches)];
 }
 
