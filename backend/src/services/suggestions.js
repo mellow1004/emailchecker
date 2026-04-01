@@ -29,7 +29,11 @@ function buildUserMessage(emailText, results) {
     '--- CHECK RESULTS (non-GOOD only) ---',
   ];
   nonGood.forEach((r) => {
-    lines.push(`[${r.id}] ${r.label}: ${r.status} (value: ${r.value ?? 'n/a'}). Message: ${r.message}`);
+    const msg =
+      r.id === 'words_per_paragraph'
+        ? `The longest body paragraph (excluding greeting and sign-off) contains ${r.value} words. Shorten it by tightening wording — do NOT suggest splitting into two paragraphs.`
+        : r.message;
+    lines.push(`[${r.id}] ${r.label}: ${r.status} (value: ${r.value ?? 'n/a'}). Message: ${msg}`);
     if (r.matchedTerms && r.matchedTerms.length) {
       lines.push(`  Matched spam terms: ${r.matchedTerms.join(', ')}`);
     }
