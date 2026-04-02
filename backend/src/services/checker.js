@@ -375,11 +375,18 @@ export async function runChecks(emailText, config, options = {}) {
 
   if (language === 'SV' && !config) {
     try {
-      const svSpamPath = path.resolve(CONFIG_ROOT, 'spamWords_sv.json');
-      const svStopPath = path.resolve(CONFIG_ROOT, 'stopWords_sv.json');
-      const svSpamWords = JSON.parse(await fs.promises.readFile(svSpamPath, 'utf8'));
-      const svStopWords = JSON.parse(await fs.promises.readFile(svStopPath, 'utf8'));
-      cfg = { ...cfg, spamWords: svSpamWords, stopWords: svStopWords };
+      const svSpamWords = JSON.parse(
+        await fs.promises.readFile(path.resolve(CONFIG_ROOT, 'spamWords_sv.json'), 'utf8')
+      );
+      const svStopWords = JSON.parse(
+        await fs.promises.readFile(path.resolve(CONFIG_ROOT, 'stopWords_sv.json'), 'utf8')
+      );
+      const svThresholds = JSON.parse(
+        await fs.promises.readFile(path.resolve(CONFIG_ROOT, 'thresholds_sv.json'), 'utf8')
+      );
+      cfg.spamWords = svSpamWords;
+      cfg.stopWords = svStopWords;
+      cfg.thresholds = svThresholds;
     } catch (err) {
       console.error('[checker] Failed to load Swedish config:', err.message);
     }

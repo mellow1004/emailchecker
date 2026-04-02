@@ -18,23 +18,57 @@ Scoring criteria:
 
 Evaluate only the relationship between subject line and body — not the quality of either individually.`;
 
+const COHERENCE_SYSTEM_PROMPT_SV = `Du utvärderar om en B2B kallt säljmejl-ämnesrad är koherent med mejlkroppen.
+Bedöm hur väl ämnesraden sätter upp och matchar innehållet i mejlkroppen.
+
+Returnera ENDAST ett JSON-objekt så här:
+{
+  "status": "good" | "warning" | "bad",
+  "score_label": "Stark" | "Måttlig" | "Svag",
+  "reason": "En mening förklaring på svenska"
+}
+
+Bedömningskriterier:
+- GOOD (Stark): Ämnesraden återspeglar tydligt mejlets ämne, ton och syfte. En mottagare som läser ämnesraden skulle inte bli förvånad av mejlinnehållet.
+- WARNING (Måttlig): Ämnesraden är löst relaterad men missar huvudpoängen eller vinkeln i mejlet. Det finns en viss koppling men den kan vara starkare.
+- BAD (Svag): Ämnesrad och mejlkropp känns frånkopplade. Ämnesraden förbereder inte läsaren för vad mejlet innehåller, eller så motsäger de varandra.
+
+Utvärdera bara förhållandet mellan ämnesrad och kropp — inte kvaliteten på vardera individuellt.`;
+
 /**
  * Call Claude to evaluate subject line vs email body coherence.
  * @param {string} subjectLine - Subject line text
  * @param {string} emailText - Email body text
+ * @param {string} [language='EN'] - 'EN' or 'SV'
  * @returns {Promise<{ status: 'good'|'warning'|'bad', score_label: string, reason: string }>}
  */
-export async function checkSubjectLineCoherence(subjectLine, emailText) {
+export async function checkSubjectLineCoherence(subjectLine, emailText, language = 'EN') {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey || !apiKey.trim()) {
-    return { status: 'warning', score_label: 'Moderate', reason: 'Coherence evaluation unavailable (no API key).' };
+    return {
+      status: 'warning',
+      score_label: language === 'SV' ? 'Måttlig' : 'Moderate',
+      reason:
+        language === 'SV'
+          ? 'Koherensutvärdering ej tillgänglig (ingen API-nyckel).'
+          : 'Coherence evaluation unavailable (no API key).',
+    };
   }
 
   const sub = subjectLine && String(subjectLine).trim();
   const body = emailText && String(emailText).trim();
   if (!sub || !body) {
-    return { status: 'warning', score_label: 'Moderate', reason: 'Subject line and email body are required for coherence check.' };
+    return {
+      status: 'warning',
+      score_label: language === 'SV' ? 'Måttlig' : 'Moderate',
+      reason:
+        language === 'SV'
+          ? 'Ämnesrad och mejlkropp krävs för koherensgranskning.'
+          : 'Subject line and email body are required for coherence check.',
+    };
   }
+
+  const systemPrompt = language === 'SV' ? COHERENCE_SYSTEM_PROMPT_SV : COHERENCE_SYSTEM_PROMPT;
 
   try {
     const client = new Anthropic();
@@ -42,7 +76,7 @@ export async function checkSubjectLineCoherence(subjectLine, emailText) {
     const message = await client.messages.create({
       model: 'claude-sonnet-4-6',
       max_tokens: 256,
-      system: COHERENCE_SYSTEM_PROMPT,
+      system: systemPrompt,
       messages: [{ role: 'user', content: userContent }],
     });
 
@@ -67,6 +101,13 @@ export async function checkSubjectLineCoherence(subjectLine, emailText) {
     return { status: validStatus, score_label, reason };
   } catch (err) {
     console.error('[subjectLineCoherence] Claude error:', err.message);
-    return { status: 'warning', score_label: 'Moderate', reason: 'Coherence evaluation failed — try again or check your connection.' };
+    return {
+      status: 'warning',
+      score_label: language === 'SV' ? 'Måttlig' : 'Moderate',
+      reason:
+        language === 'SV'
+          ? 'Koherensutvärdering misslyckades — försök igen.'
+          : 'Coherence evaluation failed — try again or check your connection.',
+    };
   }
 }

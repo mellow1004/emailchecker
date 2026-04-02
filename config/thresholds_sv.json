@@ -1,0 +1,142 @@
+{
+  "version": "1.0.0",
+  "last_updated": "2026-04-02",
+  "notes": "Svenska tröskelvärden för de 9 deterministiska kontrollerna.",
+  "checks": {
+    "word_count": {
+      "label": "Antal ord",
+      "good": { "min": 100, "max": 200 },
+      "warning": { "min": 201, "max": 250 },
+      "bad_below": 100,
+      "bad_above": 250,
+      "messages": {
+        "good": "Längden är inom det rekommenderade intervallet.",
+        "warning": "Något lång — överväg att korta ner för bättre läsbarhet.",
+        "bad_short": "För kort — lägg till kontext så att meddelandet känns komplett.",
+        "bad_long": "För lång — minska längden för att förbättra skannbarheten."
+      }
+    },
+    "paragraphs": {
+      "label": "Stycken",
+      "good": { "min": 3, "max": 5 },
+      "warning": { "min": 6, "max": 6 },
+      "bad_below": 3,
+      "bad_above": 7,
+      "messages": {
+        "good": "Strukturen är tydlig och lätt att följa.",
+        "warning": "Något överstrukturerad — överväg att slå ihop två stycken.",
+        "bad_short": "Strukturen är begränsad — sikta på 3–5 korta stycken.",
+        "bad_long": "För många radbrytningar — konsolidera för ett smidigare flöde."
+      }
+    },
+    "letters_per_word": {
+      "label": "Bokstäver per ord",
+      "good_max": 7.0,
+      "messages": {
+        "good": "Ordvalet är rakt och lättillgängligt.",
+        "bad": "Ordvalet är komplext — förenkla termer där det är möjligt."
+      }
+    },
+    "words_per_paragraph": {
+      "label": "Ord per stycke",
+      "good_max": 35,
+      "warning": { "min": 36, "max": 49 },
+      "bad_above": 50,
+      "messages": {
+        "good": "Styckelängden stöder snabb skanning.",
+        "warning": "Styckelängden är gränsfall — att minska styckets storlek kan förbättra tydligheten och svarsfrekvensen.",
+        "bad": "Styckena är långa — dela upp för att förbättra läsbarheten."
+      }
+    },
+    "unique_domains": {
+      "label": "Antal unika domäner länkade",
+      "good": [1, 2],
+      "warning": [0],
+      "bad_zero": false,
+      "bad_above": 3,
+      "messages": {
+        "good": "Länkning är konsekvent (1–2 domäner).",
+        "warning": "Inga länkar hittades — överväg att lägga till din företagswebbplats i e-postsignaturen för trovärdighet.",
+        "bad_zero": "Inga länkar hittades.",
+        "bad_many": "Flera domäner (3+) hittades — kan öka skräppostrisk."
+      }
+    },
+    "spellcheck": {
+      "label": "Stavningskontroll",
+      "good": 0,
+      "supported_languages": ["sv"],
+      "default_language": "sv",
+      "messages": {
+        "good": "Inga stavningsproblem hittades.",
+        "bad": "Stavningsproblem hittades — korrigera dem innan du skickar."
+      }
+    },
+    "spam_words_categories": {
+      "label": "Skräpordskategorier",
+      "good": 0,
+      "warning": { "min": 1, "max": 3 },
+      "bad_above": 3,
+      "medium_risk_stack_threshold": 2,
+      "b2b_stack_threshold": 2,
+      "messages": {
+        "good": "Inga högrisk-kategorier triggades.",
+        "warning": "Vissa riskkategorier triggades — granska ton och formatering.",
+        "bad": "Flera riskkategorier triggades — revidera för att minska risken."
+      },
+      "categories": [
+        "Förbjudna / högrisk säljtermer",
+        "Brådska / trycksätt",
+        "Utropstecken",
+        "VERSALER",
+        "Punktlistor",
+        "Flera frågor",
+        "Emojis"
+      ]
+    },
+    "spam_words": {
+      "label": "Skräpord",
+      "good": 0,
+      "warning": { "min": 1, "max": 3 },
+      "bad_above": 3,
+      "messages": {
+        "good": "Inga flaggade termer hittades.",
+        "warning": "Vissa flaggade termer hittades — överväg alternativ.",
+        "bad": "Många flaggade termer hittades — ersätt och testa igen."
+      }
+    },
+    "duplicate_words": {
+      "label": "Dubblettord",
+      "good": 0,
+      "warning": { "min": 1, "max": 2 },
+      "bad_above": 2,
+      "duplicate_threshold": 3,
+      "min_token_length": 3,
+      "messages": {
+        "good": "Ingen meningsfull upprepning hittades.",
+        "warning": "Mindre upprepning hittades — överväg att variera ordvalet.",
+        "bad": "Upprepad formulering hittades — revidera för tydlighet och flöde."
+      }
+    }
+  },
+  "scoring": {
+    "total_checks": 10,
+    "weights": {
+      "word_count": 13,
+      "paragraphs": 13,
+      "words_per_paragraph": 11,
+      "letters_per_word": 6,
+      "spam_words_categories": 10,
+      "spam_words": 10,
+      "unique_domains": 8,
+      "spellcheck": 7,
+      "duplicate_words": 10,
+      "cta_strength": 12
+    },
+    "levels": {
+      "good": { "min_score": 80, "message": "Innehållskvaliteten ser stark ut. Du är redo att skicka." },
+      "warning": { "min_score": 60, "message": "Innehållet är nära. Några justeringar minskar risken." },
+      "bad": { "min_score": 0, "message": "Innehållet behöver revideras. Åtgärda punkterna nedan och testa igen." }
+    }
+  },
+  "character_limit": 4000
+}

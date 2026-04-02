@@ -108,7 +108,7 @@ router.post('/', async (req, res) => {
       const subject = d.subject || '';
       const subjectCheck = checkSubjectLine(subject);
       const spamCheck = (subjectCheck.checks || []).find((c) => c.id === 'subject_spam_words') || {};
-      const coherenceResult = await checkSubjectLineCoherence(subject, fullText);
+      const coherenceResult = await checkSubjectLineCoherence(subject, fullText, language);
 
       drafts.push({
         subject: d.subject,

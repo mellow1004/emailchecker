@@ -35,7 +35,7 @@ router.post('/', async (req, res) => {
   }
 
   if (subjectLine && typeof subjectLine === 'string' && subjectLine.trim() && emailText && String(emailText).trim()) {
-    payload.subjectLineCoherence = await checkSubjectLineCoherence(subjectLine.trim(), emailText.trim());
+    payload.subjectLineCoherence = await checkSubjectLineCoherence(subjectLine.trim(), emailText.trim(), language);
   }
 
   res.json(payload);
