@@ -1,6 +1,7 @@
 import express from 'express';
 import { fetchPageContent } from '../services/fetchPage.js';
 import { generateDrafts } from '../services/claude.js';
+import { generateDraftsSv } from '../services/claude_sv.js';
 import { runChecks } from '../services/checker.js';
 import { checkSubjectLine } from '../services/subjectLineChecker.js';
 import { checkSubjectLineCoherence } from '../services/subjectLineCoherence.js';
@@ -8,7 +9,6 @@ import { checkSubjectLineCoherence } from '../services/subjectLineCoherence.js';
 const router = express.Router();
 
 const MIN_CONTENT_LENGTH = 500;
-
 const LT_DELAY_MS = 1000;
 
 router.post('/', async (req, res) => {
@@ -18,6 +18,8 @@ router.post('/', async (req, res) => {
   const targetIndustry = (req.body?.targetIndustry ?? '').trim();
   const targetRole = (req.body?.targetRole ?? '').trim();
   const locale = req.body?.locale || 'US';
+  const language = req.body?.language || 'EN';
+
   if (!url) {
     return res.status(400).json({ error: 'URL is required', drafts: [] });
   }
@@ -39,20 +41,31 @@ router.post('/', async (req, res) => {
       }
     }
 
-    const rawDrafts = await generateDrafts(pageContent, {
-      targetIndustry,
-      targetRole,
-      context: manualContext,
-      prospectContent,
-      locale,
-    });
+    // Use Swedish or English generation based on language
+    const rawDrafts =
+      language === 'SV'
+        ? await generateDraftsSv(pageContent, {
+            targetIndustry,
+            targetRole,
+            context: manualContext,
+            prospectContent,
+          })
+        : await generateDrafts(pageContent, {
+            targetIndustry,
+            targetRole,
+            context: manualContext,
+            prospectContent,
+            locale,
+          });
 
     const drafts = [];
     for (let i = 0; i < rawDrafts.length; i++) {
       const d = rawDrafts[i];
       const fullText = [d.body, d.signoff].filter(Boolean).join('\n\n');
-      const spellLocale = locale === 'UK' ? 'en-GB' : 'en-US';
-      const checkResult = await runChecks(fullText, null, { locale: spellLocale });
+
+      // Swedish uses sv locale, English uses en-GB or en-US
+      const spellLocale = language === 'SV' ? 'sv' : locale === 'UK' ? 'en-GB' : 'en-US';
+      const checkResult = await runChecks(fullText, null, { locale: spellLocale, language });
 
       // Remove unique_domains from results for scoring purposes in Tab 2
       const tab2Results = checkResult.results.map((r) =>
@@ -60,7 +73,10 @@ router.post('/', async (req, res) => {
           ? {
               ...r,
               status: 'GOOD',
-              message: 'Adding a relevant link in your signature will improve deliverability.',
+              message:
+                language === 'SV'
+                  ? 'Att lägga till en relevant länk i din signatur förbättrar levererbarheten.'
+                  : 'Adding a relevant link in your signature will improve deliverability.',
               _advisoryOnly: true,
             }
           : r
@@ -93,6 +109,7 @@ router.post('/', async (req, res) => {
       const subjectCheck = checkSubjectLine(subject);
       const spamCheck = (subjectCheck.checks || []).find((c) => c.id === 'subject_spam_words') || {};
       const coherenceResult = await checkSubjectLineCoherence(subject, fullText);
+
       drafts.push({
         subject: d.subject,
         body: d.body,
@@ -112,6 +129,7 @@ router.post('/', async (req, res) => {
           },
         },
       });
+
       if (i < rawDrafts.length - 1) {
         await new Promise((r) => setTimeout(r, LT_DELAY_MS));
       }

@@ -1,0 +1,22 @@
+{
+  "stopWords": [
+    "och", "att", "det", "som", "en", "ett", "är", "på", "av", "för",
+    "med", "till", "den", "de", "har", "inte", "om", "vi", "var", "men",
+    "så", "kan", "sig", "han", "hon", "ska", "från", "även", "eller",
+    "när", "efter", "under", "över", "mot", "utan", "inom", "genom",
+    "detta", "dessa", "alla", "flera", "många", "andra", "samma",
+    "bara", "just", "redan", "också", "sedan", "därför", "sedan",
+    "hos", "per", "via", "samt", "än", "ju", "nog", "då", "där",
+    "här", "hur", "vad", "vem", "vilken", "vilket", "vilka",
+    "din", "ditt", "dina", "era", "vår", "vårt", "våra",
+    "sin", "sitt", "sina", "hans", "hennes", "deras",
+    "ni", "dem", "dig", "mig", "oss", "honom", "henne",
+    "jag", "du", "han", "hon", "vi", "de",
+    "in", "ut", "upp", "ned", "ner", "bort", "hem",
+    "nu", "då", "här", "där", "var", "hur", "när",
+    "ha", "hade", "har", "haft", "vara", "varit", "vill",
+    "bli", "blev", "blivit", "kunna", "kunde", "måste",
+    "ser", "ger", "tar", "går", "kommer", "gör", "säger",
+    "två", "tre", "fyra", "fem", "sex", "sju", "åtta", "nio", "tio"
+  ]
+}

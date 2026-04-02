@@ -99,7 +99,7 @@ Return only a valid JSON object mapping each word to "CORRECT" or "SPELLING_ERRO
 export async function checkSpelling(text, locale = 'en-US') {
   if (!text || !text.trim()) return [];
 
-  const lang = locale === 'en-GB' ? 'en-GB' : 'en-US';
+  const lang = locale === 'en-GB' ? 'en-GB' : locale === 'sv' ? 'sv' : 'en-US';
   let matches;
   try {
     const res = await axios.post(

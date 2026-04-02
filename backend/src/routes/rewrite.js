@@ -1,5 +1,6 @@
 import express from 'express';
 import { getRewrite } from '../services/rewrite.js';
+import { getRewriteSv } from '../services/rewrite_sv.js';
 
 const router = express.Router();
 
@@ -10,9 +11,14 @@ router.post('/', async (req, res) => {
   const value = req.body?.value;
   const message = req.body?.message ?? '';
   const locale = req.body?.locale || 'US';
+  const language = req.body?.language || 'EN';
 
   try {
-    const rewrite = await getRewrite(emailText, checkLabel, value, message, checkId, locale);
+    const rewrite =
+      language === 'SV'
+        ? await getRewriteSv(emailText, checkLabel, value, message, checkId, 'SV')
+        : await getRewrite(emailText, checkLabel, value, message, checkId, locale);
+
     res.json({ rewrite });
   } catch (err) {
     console.error('[rewrite]', err.message);

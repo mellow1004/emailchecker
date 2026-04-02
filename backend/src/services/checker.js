@@ -1,3 +1,4 @@
+import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { parse } from 'tldts';
@@ -365,14 +366,29 @@ function checkDuplicateWords(text, cfg, stopWords) {
  * Run all 9 deterministic checks on email text.
  * @param {string} emailText - Raw email body (plain or HTML)
  * @param {object} [config] - Optional pre-loaded config. If omitted, loads from project config/
- * @param {{ locale?: string }} [options] - Optional. locale: 'en-US' or 'en-GB' for spellcheck (default 'en-US').
+ * @param {{ locale?: string, language?: string, subjectLine?: string|null }} [options] - locale: en-US, en-GB, or sv for spellcheck; language: EN or SV for spam/stop word lists when config omitted.
  * @returns {Promise<{ score: number, level: string, results: Array<{ id, label, status, value, message }> }>}
  */
 export async function runChecks(emailText, config, options = {}) {
-  const cfg = config || loadConfig(CONFIG_ROOT);
+  const language = options.language || 'EN';
+  let cfg = config || loadConfig(CONFIG_ROOT);
+
+  if (language === 'SV' && !config) {
+    try {
+      const svSpamPath = path.resolve(CONFIG_ROOT, 'spamWords_sv.json');
+      const svStopPath = path.resolve(CONFIG_ROOT, 'stopWords_sv.json');
+      const svSpamWords = JSON.parse(await fs.promises.readFile(svSpamPath, 'utf8'));
+      const svStopWords = JSON.parse(await fs.promises.readFile(svStopPath, 'utf8'));
+      cfg = { ...cfg, spamWords: svSpamWords, stopWords: svStopWords };
+    } catch (err) {
+      console.error('[checker] Failed to load Swedish config:', err.message);
+    }
+  }
+
   const rawText = typeof emailText === 'string' ? emailText : '';
   const text = stripPersonalizationTokens(stripHtml(rawText));
-  const locale = options.locale === 'en-GB' ? 'en-GB' : 'en-US';
+  const locale =
+    options.locale === 'en-GB' ? 'en-GB' : options.locale === 'sv' ? 'sv' : 'en-US';
 
   const r1 = checkWordCount(text, cfg);
   const r2 = checkParagraphs(text, cfg);

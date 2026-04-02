@@ -8,7 +8,78 @@ const LEVEL_MESSAGES = {
   bad: 'Content needs revision. Address the items below and test again.',
 };
 
-export default function Tab1CheckDraft() {
+const LEVEL_MESSAGES_SV = {
+  good: 'Innehållskvaliteten ser stark ut. Du är redo att skicka.',
+  warning: 'Innehållet är nära. Några justeringar minskar risken.',
+  bad: 'Innehållet behöver revideras. Åtgärda punkterna nedan och testa igen.',
+};
+
+const UI_TEXT = {
+  EN: {
+    description: 'Paste your cold email draft and get a full breakdown — scored, flagged, and improved.',
+    subjectLabel: 'Subject line',
+    subjectPlaceholder: 'e.g. Treasury infrastructure for {{Company}}',
+    subjectHint: 'Optional — included in subject line analysis',
+    draftLabel: 'Email draft',
+    draftPlaceholder: 'Paste your cold email draft here...',
+    runBtn: 'Review email',
+    runningBtn: 'Analysing...',
+    spellingLabel: 'Spelling:',
+    emptyTitle: 'Your review will appear here',
+    emptyList: ['Overall quality score', 'Breakdown across 9 checks', 'Flagged wording and weak spots', 'Practical improvement suggestions', 'Stronger revised version'],
+    loadingText: 'Running checks…',
+    subjectLineTitle: 'Subject line',
+    coherenceTitle: 'Subject line + email coherence',
+    flaggedTerms: 'Flagged terms:',
+    useInstead: 'Use instead:',
+    flaggedWords: 'Flagged words:',
+    repeatedWords: 'Repeated words:',
+    suggestion: 'Suggestion',
+    rewriteBtn: 'Rewrite suggestion',
+    rewritingBtn: 'Rewriting…',
+    rewriteError: 'Something went wrong — try again',
+    rewriteLabel: 'Suggested rewrite:',
+    copyRewrite: 'Copy rewrite',
+    disclaimer: 'This tool evaluates content and structure only. It does not guarantee deliverability or compliance with your provider or local laws.',
+    value: 'Value:',
+    levelGood: 'Good',
+    levelWarning: 'Warning',
+    levelBad: 'Needs work',
+  },
+  SV: {
+    description: 'Klistra in ditt kalla säljmejl och få en fullständig genomgång — betygsatt, flaggad och förbättrad.',
+    subjectLabel: 'Ämnesrad',
+    subjectPlaceholder: 't.ex. Treasury-infrastruktur för {{Company}}',
+    subjectHint: 'Valfritt — inkluderas i ämnesradsanalys',
+    draftLabel: 'Mejlutkast',
+    draftPlaceholder: 'Klistra in ditt kalla säljmejl här...',
+    runBtn: 'Granska mejl',
+    runningBtn: 'Analyserar...',
+    spellingLabel: 'Stavning:',
+    emptyTitle: 'Din granskning visas här',
+    emptyList: ['Övergripande kvalitetsbetyg', 'Genomgång av 9 kontroller', 'Flaggad formulering och svaga punkter', 'Praktiska förbättringsförslag', 'Starkare reviderad version'],
+    loadingText: 'Kör kontroller…',
+    subjectLineTitle: 'Ämnesrad',
+    coherenceTitle: 'Ämnesrad + mejlkoherens',
+    flaggedTerms: 'Flaggade termer:',
+    useInstead: 'Använd istället:',
+    flaggedWords: 'Flaggade ord:',
+    repeatedWords: 'Upprepade ord:',
+    suggestion: 'Förslag',
+    rewriteBtn: 'Omskriv förslag',
+    rewritingBtn: 'Skriver om…',
+    rewriteError: 'Något gick fel — försök igen',
+    rewriteLabel: 'Föreslaget omskrivning:',
+    copyRewrite: 'Kopiera omskrivning',
+    disclaimer: 'Det här verktyget utvärderar innehåll och struktur. Det garanterar inte leveransbarhet eller efterlevnad av din leverantörs eller lokala lagar.',
+    value: 'Värde:',
+    levelGood: 'Bra',
+    levelWarning: 'Varning',
+    levelBad: 'Behöver arbete',
+  },
+};
+
+export default function Tab1CheckDraft({ language = 'EN' }) {
   const [subjectLine, setSubjectLine] = useState('');
   const [draft, setDraft] = useState('');
   const [spelling, setSpelling] = useState('US'); // US | UK
@@ -20,6 +91,8 @@ export default function Tab1CheckDraft() {
   const [rewriteLoading, setRewriteLoading] = useState({});
   const [rewriteResult, setRewriteResult] = useState({});
   const [rewriteError, setRewriteError] = useState({});
+  const t = UI_TEXT[language] || UI_TEXT.EN;
+  const levelMessages = language === 'SV' ? LEVEL_MESSAGES_SV : LEVEL_MESSAGES;
 
   const charCount = draft.length;
   const overLimit = charCount > CHAR_LIMIT;
@@ -40,7 +113,8 @@ export default function Tab1CheckDraft() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           draft: draft.trim(),
-          locale: spelling === 'UK' ? 'en-GB' : 'en-US',
+          locale: language === 'SV' ? 'sv' : spelling === 'UK' ? 'en-GB' : 'en-US',
+          language,
           ...(subjectLine.trim() ? { subjectLine: subjectLine.trim() } : {}),
         }),
       });
@@ -97,6 +171,7 @@ export default function Tab1CheckDraft() {
           checkLabel: r.label,
           value: r.value,
           message: r.message,
+          language,
           ...(r.id === 'spellcheck' ? { locale: spelling } : {}),
         }),
       });
@@ -121,32 +196,32 @@ export default function Tab1CheckDraft() {
         <div className="tab-layout-left">
           <section className="input-card">
             <p className="input-card-description">
-              Paste your cold email draft and get a full breakdown — scored, flagged, and improved.
+              {t.description}
             </p>
 
             <div className="input-field-group">
               <label className="input-label" htmlFor="subject-line">
-                Subject line
+                {t.subjectLabel}
               </label>
               <input
                 id="subject-line"
                 type="text"
                 className="input-field"
-                placeholder="e.g. Treasury infrastructure for {{Company}}"
+                placeholder={t.subjectPlaceholder}
                 value={subjectLine}
                 onChange={(e) => setSubjectLine(e.target.value)}
               />
-              <span className="input-hint">Optional — included in subject line analysis</span>
+              <span className="input-hint">{t.subjectHint}</span>
             </div>
 
             <div className="input-field-group">
               <label className="input-label" htmlFor="draft">
-                Email draft
+                {t.draftLabel}
               </label>
               <textarea
                 id="draft"
                 className="input-field input-textarea"
-                placeholder="Paste your cold email draft here..."
+                placeholder={t.draftPlaceholder}
                 value={draft}
                 onChange={handleDraftChange}
                 rows={20}
@@ -156,23 +231,25 @@ export default function Tab1CheckDraft() {
                 <span className={`input-counter ${overLimit ? 'tab1-char-count--over' : ''}`}>
                   {charCount.toLocaleString()} / {CHAR_LIMIT.toLocaleString()}
                 </span>
-                <div className="spelling-toggle">
-                  <span className="spelling-label">Spelling:</span>
-                  <button
-                    type="button"
-                    className={`spelling-btn ${spelling === 'US' ? 'spelling-btn--active' : ''}`}
-                    onClick={() => setSpelling('US')}
-                  >
-                    US
-                  </button>
-                  <button
-                    type="button"
-                    className={`spelling-btn ${spelling === 'UK' ? 'spelling-btn--active' : ''}`}
-                    onClick={() => setSpelling('UK')}
-                  >
-                    UK
-                  </button>
-                </div>
+                {language !== 'SV' && (
+                  <div className="spelling-toggle">
+                    <span className="spelling-label">{t.spellingLabel}</span>
+                    <button
+                      type="button"
+                      className={`spelling-btn ${spelling === 'US' ? 'spelling-btn--active' : ''}`}
+                      onClick={() => setSpelling('US')}
+                    >
+                      US
+                    </button>
+                    <button
+                      type="button"
+                      className={`spelling-btn ${spelling === 'UK' ? 'spelling-btn--active' : ''}`}
+                      onClick={() => setSpelling('UK')}
+                    >
+                      UK
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
 
@@ -182,7 +259,7 @@ export default function Tab1CheckDraft() {
               disabled={!canSubmit || loading}
               onClick={runCheck}
             >
-              {loading ? 'Analysing...' : 'Review email'}
+              {loading ? t.runningBtn : t.runBtn}
             </button>
             {error && <p className="tab1-error">{error}</p>}
           </section>
@@ -193,19 +270,17 @@ export default function Tab1CheckDraft() {
         {!results && !loading && (
           <div className="results-empty">
             <div className="results-empty-icon">✉️</div>
-            <h3 className="results-empty-title">Your review will appear here</h3>
+            <h3 className="results-empty-title">{t.emptyTitle}</h3>
             <ul className="results-empty-list">
-              <li>✓ Overall quality score</li>
-              <li>✓ Breakdown across 9 checks</li>
-              <li>✓ Flagged wording and weak spots</li>
-              <li>✓ Practical improvement suggestions</li>
-              <li>✓ Stronger revised version</li>
+              {t.emptyList.map((item) => (
+                <li key={item}>✓ {item}</li>
+              ))}
             </ul>
           </div>
         )}
         {loading && (
           <div className="tab1-results-loading">
-            <p>Running checks…</p>
+            <p>{t.loadingText}</p>
           </div>
         )}
         {results && !loading && (
@@ -213,23 +288,23 @@ export default function Tab1CheckDraft() {
             <div className="tab1-score-block">
               <div className="tab1-score-value">{results.score}%</div>
               <div className={`tab1-level tab1-level--${results.level}`}>
-                {results.level === 'good' && 'Good'}
-                {results.level === 'warning' && 'Warning'}
-                {results.level === 'bad' && 'Needs work'}
+                {results.level === 'good' && t.levelGood}
+                {results.level === 'warning' && t.levelWarning}
+                {results.level === 'bad' && t.levelBad}
               </div>
               <p className="tab1-level-message">
-                {LEVEL_MESSAGES[results.level] || results.level}
+                {levelMessages[results.level] || results.level}
               </p>
             </div>
 
             {results.subjectLine && (
               <div className="tab1-subject-panel">
-                <h3 className="tab1-subject-title">Subject line</h3>
+                <h3 className="tab1-subject-title">{t.subjectLineTitle}</h3>
                 <div className="tab1-subject-header">
                   <span className={`tab1-chip tab1-chip--${results.subjectLine.overallStatus}`}>
-                    {results.subjectLine.overallStatus === 'good' && 'Good'}
-                    {results.subjectLine.overallStatus === 'warning' && 'Warning'}
-                    {results.subjectLine.overallStatus === 'bad' && 'Needs work'}
+                    {results.subjectLine.overallStatus === 'good' && t.levelGood}
+                    {results.subjectLine.overallStatus === 'warning' && t.levelWarning}
+                    {results.subjectLine.overallStatus === 'bad' && t.levelBad}
                   </span>
                   <span className="tab1-subject-score">{results.subjectLine.score}%</span>
                 </div>
@@ -251,7 +326,7 @@ export default function Tab1CheckDraft() {
                           </span>
                           {c.matchedTerms && c.matchedTerms.length > 0 && (
                             <span className="tab1-subject-flagged">
-                              Flagged: {c.matchedTerms.join(', ')}
+                              {t.flaggedTerms} {c.matchedTerms.join(', ')}
                             </span>
                           )}
                           {hasDetail && (
@@ -263,11 +338,11 @@ export default function Tab1CheckDraft() {
                         {hasDetail && isExpanded && (
                           <div className="tab1-check-detail">
                             {c.value != null && (
-                              <p className="tab1-check-value">Value: {c.value}</p>
+                              <p className="tab1-check-value">{t.value} {c.value}</p>
                             )}
                             {c.matchedTerms && c.matchedTerms.length > 0 && (
                               <p className="tab1-check-matched">
-                                Flagged terms: <strong>{c.matchedTerms.join(', ')}</strong>
+                                {t.flaggedTerms} <strong>{c.matchedTerms.join(', ')}</strong>
                               </p>
                             )}
                             <p className="tab1-check-message">{c.message}</p>
@@ -282,12 +357,12 @@ export default function Tab1CheckDraft() {
 
             {results.subjectLineCoherence && (
               <div className="tab1-coherence-panel">
-                <h3 className="tab1-coherence-title">Subject line + email coherence</h3>
+                <h3 className="tab1-coherence-title">{t.coherenceTitle}</h3>
                 <div className="tab1-coherence-row">
                   <span className={`tab1-chip tab1-chip--${results.subjectLineCoherence.status}`}>
-                    {results.subjectLineCoherence.status === 'good' && 'Good'}
-                    {results.subjectLineCoherence.status === 'warning' && 'Warning'}
-                    {results.subjectLineCoherence.status === 'bad' && 'Weak'}
+                    {results.subjectLineCoherence.status === 'good' && t.levelGood}
+                    {results.subjectLineCoherence.status === 'warning' && t.levelWarning}
+                    {results.subjectLineCoherence.status === 'bad' && t.levelBad}
                   </span>
                   <span className="tab1-coherence-label">{results.subjectLineCoherence.score_label}</span>
                 </div>
@@ -320,34 +395,34 @@ export default function Tab1CheckDraft() {
                     {hasDetail && isExpanded && (
                       <div className="tab1-check-detail">
                         {r.value != null && (
-                          <p className="tab1-check-value">Value: {r.value}</p>
+                          <p className="tab1-check-value">{t.value} {r.value}</p>
                         )}
                         {r.matchedTerms && r.matchedTerms.length > 0 && (
                           <>
                             <p className="tab1-check-matched">
-                              Flagged terms: <strong>{r.matchedTerms.join(', ')}</strong>
+                              {t.flaggedTerms} <strong>{r.matchedTerms.join(', ')}</strong>
                             </p>
                             {r.matchedReplacements && r.matchedReplacements.length > 0 && (
                               <p className="tab1-check-replacements">
-                                Use instead: {r.matchedReplacements.map(({ term, replacements }) => `${term} → ${replacements.join(', ')}`).join('; ')}
+                                {t.useInstead} {r.matchedReplacements.map(({ term, replacements }) => `${term} → ${replacements.join(', ')}`).join('; ')}
                               </p>
                             )}
                           </>
                         )}
                         {r.flaggedWords && r.flaggedWords.length > 0 && (
                           <p className="tab1-check-matched">
-                            Flagged words: <strong>{r.flaggedWords.join(', ')}</strong>
+                            {t.flaggedWords} <strong>{r.flaggedWords.join(', ')}</strong>
                           </p>
                         )}
                         {r.duplicateList && r.duplicateList.length > 0 && (
                           <p className="tab1-check-matched">
-                            Repeated words: <strong>{r.duplicateList.map(({ word, count }) => `${word} (${count})`).join(', ')}</strong>
+                            {t.repeatedWords} <strong>{r.duplicateList.map(({ word, count }) => `${word} (${count})`).join(', ')}</strong>
                           </p>
                         )}
                         <p className="tab1-check-message">{r.message}</p>
                         {results.suggestions && results.suggestions[r.id] && (
                           <div className="tab1-suggestion">
-                            <p className="tab1-suggestion-label">Suggestion</p>
+                            <p className="tab1-suggestion-label">{t.suggestion}</p>
                             {(results.suggestions[r.id].explanation || results.suggestions[r.id].fix) && (
                               <>
                                 {results.suggestions[r.id].explanation && (
@@ -368,14 +443,14 @@ export default function Tab1CheckDraft() {
                               onClick={() => handleRewrite(r)}
                               disabled={rewriteLoading[r.id]}
                             >
-                              {rewriteLoading[r.id] ? 'Rewriting…' : 'Rewrite suggestion'}
+                              {rewriteLoading[r.id] ? t.rewritingBtn : t.rewriteBtn}
                             </button>
                             {rewriteError[r.id] && (
-                              <p className="tab1-rewrite-error">Something went wrong — try again</p>
+                              <p className="tab1-rewrite-error">{t.rewriteError}</p>
                             )}
                             {rewriteResult[r.id] != null && rewriteResult[r.id] !== '' && !rewriteLoading[r.id] && (
                               <div className="tab1-rewrite-result">
-                                <label className="tab1-rewrite-label">Suggested rewrite:</label>
+                                <label className="tab1-rewrite-label">{t.rewriteLabel}</label>
                                 <textarea
                                   className="tab1-textarea tab1-rewrite-textarea"
                                   readOnly
@@ -387,7 +462,7 @@ export default function Tab1CheckDraft() {
                                   className="tab1-rewrite-copy"
                                   onClick={() => navigator.clipboard.writeText(rewriteResult[r.id])}
                                 >
-                                  Copy rewrite
+                                  {t.copyRewrite}
                                 </button>
                               </div>
                             )}
@@ -401,7 +476,7 @@ export default function Tab1CheckDraft() {
             </ul>
 
             <p className="tab1-disclaimer">
-              This tool evaluates content and structure only. It does not guarantee deliverability or compliance with your provider or local laws.
+              {t.disclaimer}
             </p>
           </>
         )}

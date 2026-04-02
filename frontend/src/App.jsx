@@ -4,6 +4,7 @@ import Tab2GenerateScore from './components/Tab2GenerateScore.jsx';
 
 export default function App() {
   const [activeTab, setActiveTab] = useState('tab1');
+  const [language, setLanguage] = useState('EN');
 
   return (
     <div className="app">
@@ -34,6 +35,16 @@ export default function App() {
         </div>
       </header>
       <main className="app-main">
+        <div className="language-selector">
+          <select
+            className="language-dropdown"
+            value={language}
+            onChange={(e) => setLanguage(e.target.value)}
+          >
+            <option value="EN">🇬🇧 English</option>
+            <option value="SV">🇸🇪 Svenska</option>
+          </select>
+        </div>
         <div className="tool-tabs">
           <button
             type="button"
@@ -50,8 +61,8 @@ export default function App() {
             ⚡ Generate Drafts
           </button>
         </div>
-        {activeTab === 'tab1' && <Tab1CheckDraft />}
-        {activeTab === 'tab2' && <Tab2GenerateScore />}
+        {activeTab === 'tab1' && <Tab1CheckDraft language={language} />}
+        {activeTab === 'tab2' && <Tab2GenerateScore language={language} />}
       </main>
 
       <section className="lp-section lp-section--light">
