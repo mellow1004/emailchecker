@@ -341,7 +341,45 @@ Return only a JSON array of exactly 3 objects, each with "subject", "body", and 
     const spellLocale = locale === 'UK' ? 'en-GB' : 'en-US';
     const checked = await runChecks(fullText, null, { locale: spellLocale });
 
-    if (checked.score >= 85) {
+    // If only CTA is non-GOOD, fix CTA automatically instead of full retry
+    const nonGoodChecks = checked.results.filter((r) => r.status !== 'GOOD');
+    const onlyCTAFailing = nonGoodChecks.length === 1 && nonGoodChecks[0].id === 'cta_strength';
+
+    if (checked.score >= 85 && !onlyCTAFailing) {
+      finalDrafts.push(draft);
+      continue;
+    }
+
+    if (onlyCTAFailing) {
+      const ctaFixContent = `Here is a B2B cold email. The CTA is weak — rewrite ONLY the last sentence before the sign-off with a stronger CTA. Use one of these styles:
+- Specific day/time: "Would Tuesday or Thursday work for a 15-minute walkthrough of how this applies to {{Company}}?"
+- Diagnostic question: "How is {{Company}} currently managing [relevant topic from email] — one system or multiple tools?"
+- Outcome question: "What is the biggest obstacle preventing {{Company}} from [relevant outcome from email]?"
+
+Return the full email with only the CTA sentence changed. No commentary.
+
+Email:
+${draft.body}
+
+Sign-off:
+${draft.signoff}`;
+
+      const ctaFixMessage = await client.messages.create({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 2048,
+        system: GENERATE_SYSTEM_PROMPT,
+        messages: [{ role: 'user', content: ctaFixContent }],
+      });
+
+      const ctaFixRaw = ctaFixMessage.content?.[0]?.type === 'text' ? ctaFixMessage.content[0].text.trim() : '';
+      if (ctaFixRaw) {
+        finalDrafts.push({
+          subject: draft.subject,
+          body: stripEmDash(ctaFixRaw),
+          signoff: draft.signoff,
+        });
+        continue;
+      }
       finalDrafts.push(draft);
       continue;
     }
