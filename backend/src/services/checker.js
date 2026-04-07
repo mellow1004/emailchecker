@@ -410,9 +410,10 @@ export async function runChecks(emailText, config, options = {}) {
   const ctaResult = language === 'SV'
     ? await checkCtaStrengthSv(text)
     : await checkCtaStrength(text);
+  const ctaLabel = language === 'SV' ? 'CTA-styrka' : 'CTA strength';
   const r10 = result(
     'cta_strength',
-    'CTA strength',
+    ctaLabel,
     ctaResult.status.toUpperCase(),
     ctaResult.score_label,
     ctaResult.reason
