@@ -106,7 +106,7 @@ router.post('/', async (req, res) => {
       const tab2Level = tab2Score >= 80 ? 'good' : tab2Score >= 60 ? 'warning' : 'bad';
 
       const subject = d.subject || '';
-      const subjectCheck = checkSubjectLine(subject);
+      const subjectCheck = checkSubjectLine(subject, language);
       const spamCheck = (subjectCheck.checks || []).find((c) => c.id === 'subject_spam_words') || {};
       const coherenceResult = await checkSubjectLineCoherence(subject, fullText, language);
 

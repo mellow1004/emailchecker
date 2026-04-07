@@ -31,7 +31,7 @@ router.post('/', async (req, res) => {
   payload.suggestions = suggestions;
 
   if (subjectLine && typeof subjectLine === 'string' && subjectLine.trim()) {
-    payload.subjectLine = checkSubjectLine(subjectLine.trim());
+    payload.subjectLine = checkSubjectLine(subjectLine.trim(), language);
   }
 
   if (subjectLine && typeof subjectLine === 'string' && subjectLine.trim() && emailText && String(emailText).trim()) {

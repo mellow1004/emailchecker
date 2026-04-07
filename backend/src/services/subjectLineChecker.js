@@ -2,6 +2,28 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { loadConfig } from '../config/loadConfig.js';
 
+const LABELS_SV = {
+  subject_length: 'Ämnesradslängd',
+  subject_spam_words: 'Skräpord i ämnesrad',
+  subject_personalization: 'Personalisering',
+  subject_punctuation: 'Interpunktion',
+};
+
+const MESSAGES_SV = {
+  length_good: 'Längden är inom det rekommenderade intervallet.',
+  length_warning_short: 'Ämnesraden är kort — överväg att lägga till mer kontext.',
+  length_warning_long: 'Ämnesraden är lång — överväg att korta ner den.',
+  length_bad_short: 'Ämnesraden är för kort för att vara effektiv.',
+  length_bad_long: 'Ämnesraden är för lång — de flesta e-postklienter klipper av den.',
+  spam_good: 'Inga skräpord hittades i ämnesraden.',
+  spam_warning: 'Vissa risktermer hittades i ämnesraden — överväg alternativ.',
+  spam_bad: 'Många risktermer hittades i ämnesraden — revidera innan du skickar.',
+  personalization_good: 'Innehåller personaliseringstoken.',
+  personalization_warning: 'Att lägga till {{Company}} eller {{FirstName}} kan förbättra öppningsfrekvensen.',
+  punctuation_good: 'Ingen problematisk interpunktion hittades.',
+  punctuation_warning: 'Undvik utropstecken i ämnesrader — de kan trigga skräppostfilter.',
+};
+
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CONFIG_ROOT = path.resolve(__dirname, '../../../config');
 
@@ -133,18 +155,66 @@ function checkPunctuation(subjectLine) {
   return result(id, label, 'GOOD', `${qCount} ?, ${eCount} !`, 'No question or exclamation marks.');
 }
 
+function parseSubjectLengthValue(value) {
+  const m = String(value).match(/^(\d+)\s+words,\s+(\d+)\s+chars$/);
+  if (!m) return { words: null, chars: null };
+  return { words: Number(m[1]), chars: Number(m[2]) };
+}
+
+function translateChecksToSv(checks) {
+  return checks.map((c) => ({
+    ...c,
+    label: LABELS_SV[c.id] || c.label,
+    message: (() => {
+      if (c.id === 'subject_length') {
+        if (c.status === 'GOOD') return MESSAGES_SV.length_good;
+        const { words, chars } = parseSubjectLengthValue(c.value);
+        if (c.status === 'WARNING') {
+          return MESSAGES_SV.length_warning_long;
+        }
+        if (c.status === 'BAD') {
+          if (words != null && words < 4) return MESSAGES_SV.length_bad_short;
+          if (words != null && words > 12) return MESSAGES_SV.length_bad_long;
+          if (chars != null && chars > 75) return MESSAGES_SV.length_bad_long;
+          return MESSAGES_SV.length_bad_long;
+        }
+        return MESSAGES_SV.length_warning_long;
+      }
+      if (c.id === 'subject_spam_words') {
+        if (c.status === 'GOOD') return MESSAGES_SV.spam_good;
+        if (c.status === 'WARNING') return MESSAGES_SV.spam_warning;
+        return MESSAGES_SV.spam_bad;
+      }
+      if (c.id === 'subject_personalization') {
+        if (c.status === 'GOOD') return MESSAGES_SV.personalization_good;
+        return MESSAGES_SV.personalization_warning;
+      }
+      if (c.id === 'subject_punctuation') {
+        if (c.status === 'GOOD') return MESSAGES_SV.punctuation_good;
+        return MESSAGES_SV.punctuation_warning;
+      }
+      return c.message;
+    })(),
+  }));
+}
+
 /**
  * Run 4 deterministic checks on a subject line.
  * @param {string} subjectLine - Raw subject line (may contain {{tokens}})
+ * @param {string} [language='EN'] - 'EN' or 'SV'
  * @returns {{ overallStatus: 'good'|'warning'|'bad', score: number, checks: Array<{ id, label, status, value, message }> }}
  */
-export function checkSubjectLine(subjectLine) {
+export function checkSubjectLine(subjectLine, language = 'EN') {
   const cfg = loadConfig(CONFIG_ROOT);
   const c1 = checkLength(subjectLine);
   const c2 = checkSpamWords(subjectLine, cfg.spamWords);
   const c3 = checkPersonalization(subjectLine);
   const c4 = checkPunctuation(subjectLine);
-  const checks = [c1, c2, c3, c4];
+  let checks = [c1, c2, c3, c4];
+
+  if (language === 'SV') {
+    checks = translateChecksToSv(checks);
+  }
 
   const points = { GOOD: 25, WARNING: 12, BAD: 0 };
   let score = 0;

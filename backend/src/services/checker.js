@@ -6,6 +6,7 @@ import { loadConfig } from '../config/loadConfig.js';
 import { validateCapsWords } from './capsValidation.js';
 import { checkSpelling } from './spellcheck.js';
 import { checkCtaStrength } from './ctaCheck.js';
+import { checkCtaStrengthSv } from './ctaCheck_sv.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CONFIG_ROOT = path.resolve(__dirname, '../../../config');
@@ -406,7 +407,9 @@ export async function runChecks(emailText, config, options = {}) {
   const r7 = await checkSpamWordsCategories(text, cfg, cfg.spamWords, cfg.capsAllowlist);
   const r8 = checkSpamWords(text, cfg, cfg.spamWords);
   const r9 = checkDuplicateWords(text, cfg, cfg.stopWords);
-  const ctaResult = await checkCtaStrength(text);
+  const ctaResult = language === 'SV'
+    ? await checkCtaStrengthSv(text)
+    : await checkCtaStrength(text);
   const r10 = result(
     'cta_strength',
     'CTA strength',
